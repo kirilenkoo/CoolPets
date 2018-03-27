@@ -12,7 +12,7 @@ import timber.log.Timber
  */
 class TagRepository: Repository{
     override fun fetchData(params: HashMap<String, Any>): Observable<*> {
-        val srcObservable: Observable<List<Tag>> = NetworkDataSource.fectchTags().share()
+        val srcObservable: Observable<List<Tag>> = NetworkDataSource.fetchTags().share()
         srcObservable.subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe (
