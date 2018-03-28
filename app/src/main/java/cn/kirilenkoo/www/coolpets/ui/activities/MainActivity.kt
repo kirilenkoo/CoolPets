@@ -1,42 +1,49 @@
 package cn.kirilenkoo.www.coolpets.ui.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseActivity
+import cn.kirilenkoo.www.coolpets.model.Comment
 import cn.kirilenkoo.www.coolpets.model.Post
-import cn.kirilenkoo.www.coolpets.model.Tag
-import cn.kirilenkoo.www.coolpets.repository.PostRepository
-import cn.kirilenkoo.www.coolpets.repository.TagRepository
+import cn.kirilenkoo.www.coolpets.repository.CommentRepository
 import com.avos.avoscloud.AVObject
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
-import java.util.*
-import kotlin.collections.HashMap
 
 class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val rep = PostRepository()
-        val ob: Observable<List<Post>> = rep.fetchData(HashMap()) as Observable<List<Post>>
+        val rep = CommentRepository()
+        val params = HashMap<String, Any>()
+        params["postId"] = "5aba0f317565710045876558"
+        val ob: Observable<List<Comment>> = rep.fetchData(params) as Observable<List<Comment>>
         Log.d("activity","observable created")
         ob.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {result -> dealResult(result)}
+                        {result -> dealCommentsResult(result)}
                 )
 //        generatePost()
     }
 
-    fun dealResult(list: List<Post>){
+    fun dealCommentsResult(list: List<Comment>){
+        Log.d("result", list.size.toString())
+        list.forEach {
+            Log.d("result", it.text)
+        }
+    }
+
+    fun dealPostResult(list: List<Post>){
         Log.d("result", list.size.toString())
         list.forEach {
             Log.d("result", it.title)
+            it.contents.forEach {
+                Log.d("result", it.text)
+            }
         }
     }
 
