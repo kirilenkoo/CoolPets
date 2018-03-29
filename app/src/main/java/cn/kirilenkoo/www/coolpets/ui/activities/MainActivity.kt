@@ -9,8 +9,14 @@ import cn.kirilenkoo.www.coolpets.model.Post
 import cn.kirilenkoo.www.coolpets.repository.CommentRepository
 import com.avos.avoscloud.AVObject
 import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
+import timber.log.Timber
 
 class MainActivity : BaseActivity() {
 
@@ -20,13 +26,32 @@ class MainActivity : BaseActivity() {
         val rep = CommentRepository()
         val params = HashMap<String, Any>()
         params["postId"] = "5aba0f317565710045876558"
-        val ob: Observable<List<Comment>> = rep.fetchData(params) as Observable<List<Comment>>
+        val ob: Single<List<Comment>> = rep.fetchData(params) as Single<List<Comment>>
         Log.d("activity","observable created")
+
+        val subscriber: Observer<List<Comment>> = object:Observer<List<Comment>>{
+            override fun onComplete() {
+            }
+
+            override fun onSubscribe(d: Disposable) {
+            }
+
+            override fun onNext(t: List<Comment>) {
+                dealCommentsResult(t)
+            }
+
+            override fun onError(e: Throwable) {
+            }
+
+        }
         ob.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {result -> dealCommentsResult(result)}
+                .subscribe (
+                        {result -> dealCommentsResult(result)},
+                        {error -> Timber.e(error.message)}
                 )
+
+//        ob.retry()
 //        generatePost()
     }
 

@@ -46,4 +46,5 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
+    implementation 'com.jakewharton.rx2:replaying-share-kotlin:2.0.1'
 }

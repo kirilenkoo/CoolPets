@@ -6,7 +6,9 @@ import cn.kirilenkoo.www.coolpets.model.PostContent
 import cn.kirilenkoo.www.coolpets.model.Tag
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.AVQuery
+import io.reactivex.Maybe
 import io.reactivex.Observable
+import io.reactivex.Single
 
 /**
  * Created by huangzilong on 2018/3/22.
@@ -48,16 +50,28 @@ class NetworkDataSource {
             }
         }
 
-        fun fetchPostComments(postId: String?): Observable<List<Comment>>{
-            return Observable.create<List<Comment>> {
-                val avList = AVQuery<AVObject>("Comment").whereEqualTo("targetPost", postId).find()
-                val commentList = avList.mapNotNull {
-                    Comment(text = it.getString("text"), totalIndex = it.getInt("totalIndex"))
+        fun fetchPostComments(postId: String?): Single<List<Comment>>{
+            return Single.create {
+                try {
+                    val avList = AVQuery<AVObject>("Comment").whereEqualTo("targetPost", AVObject.createWithoutData("Post", postId)).find()
+                    val commentList = avList.mapNotNull {
+                        Comment(text = it.getString("text"), totalIndex = it.getInt("totalIndex"))
+                    }
+                    it.onSuccess(commentList)
+                }catch (e: Exception){
+                    it.onError(e)
                 }
-                it.onNext(
-                        commentList
-                )
+
             }
+//            return Observable.create<List<Comment>> {
+//                val avList = AVQuery<AVObject>("Comment").whereEqualTo("targetPost", AVObject.createWithoutData("Post", postId)).find()
+//                val commentList = avList.mapNotNull {
+//                    Comment(text = it.getString("text"), totalIndex = it.getInt("totalIndex"))
+//                }
+//                it.onNext(
+//                        commentList
+//                )
+//            }
         }
     }
 }
