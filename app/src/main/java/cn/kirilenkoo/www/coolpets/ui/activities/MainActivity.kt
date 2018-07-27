@@ -67,30 +67,30 @@ class MainActivity : BaseActivity()
 //        generatePost()
     }
 
-    fun dealCommentsResult(list: List<Comment>){
-        Log.d("result", list.size.toString())
-        list.forEach {
-            Log.d("result", it.text)
-        }
-    }
-
-    fun dealPostResult(list: List<Post>){
-        Log.d("result", list.size.toString())
-        list.forEach {
-            Log.d("result", it.title)
-            it.contents.forEach {
-                Log.d("result", it.text)
-            }
-        }
-    }
-
-
-    fun generatePost(){
-        val post = AVObject("Post")
-        val content1 = AVObject.createWithoutData("PostContent","5aba0ec19f545400458d0c50")
-        val content2 = AVObject.createWithoutData("PostContent","5aba0eb6a22b9d00451a83f7")
-        val list = listOf<Any>(content1,content2)
-        post.put("contents",list)
-        post.saveInBackground()
-    }
+//    fun dealCommentsResult(list: List<Comment>){
+//        Log.d("result", list.size.toString())
+//        list.forEach {
+//            Log.d("result", it.text)
+//        }
+//    }
+//
+//    fun dealPostResult(list: List<Post>){
+//        Log.d("result", list.size.toString())
+//        list.forEach {
+//            Log.d("result", it.title)
+//            it.contents.forEach {
+//                Log.d("result", it.text)
+//            }
+//        }
+//    }
+//
+//
+//    fun generatePost(){
+//        val post = AVObject("Post")
+//        val content1 = AVObject.createWithoutData("PostContent","5aba0ec19f545400458d0c50")
+//        val content2 = AVObject.createWithoutData("PostContent","5aba0eb6a22b9d00451a83f7")
+//        val list = listOf<Any>(content1,content2)
+//        post.put("contents",list)
+//        post.saveInBackground()
+//    }
 }

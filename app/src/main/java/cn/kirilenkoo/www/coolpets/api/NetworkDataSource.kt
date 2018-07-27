@@ -6,7 +6,6 @@ import cn.kirilenkoo.www.coolpets.model.PostContent
 import cn.kirilenkoo.www.coolpets.model.Tag
 import com.avos.avoscloud.AVObject
 import com.avos.avoscloud.AVQuery
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 

@@ -9,6 +9,7 @@ import com.avos.avoscloud.AVOSCloud
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -24,6 +25,7 @@ class BaseApplication: Application(), HasActivityInjector {
         super.onCreate()
         init3party()
         initDagger()
+        Timber.plant(Timber.DebugTree())
     }
 
     private fun initDagger() {
