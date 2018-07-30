@@ -18,9 +18,11 @@ package cn.kirilenkoo.www.coolpets.repository
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
 import cn.kirilenkoo.www.coolpets.api.ApiResponseWrapper
+import cn.kirilenkoo.www.coolpets.model.Post
 import com.android.example.github.vo.Resource
 import cn.kirilenkoo.www.coolpets.util.AppExecutors
 /**
@@ -69,6 +71,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)
             result.removeSource(dbSource)
+            setValue(Resource.success(response?.data as ResultType))
 //            when (response) {
 //                is ApiSuccessResponse -> {
 //                    appExecutors.diskIO().execute {

@@ -25,12 +25,13 @@ class PostRepository @Inject constructor(private val appExecutor : AppExecutors)
 
             override fun loadFromDb(): LiveData<Post> {
                 val liveData = MutableLiveData<Post>()
+                liveData.value = Post("kkk")
                 return liveData
             }
 
             override fun createCall(): LiveData<ApiResponseWrapper<Post>> {
                 val liveData = MutableLiveData<ApiResponseWrapper<Post>>()
-                val apiResponseWrapper = ApiResponseWrapper<Post>()
+                val apiResponseWrapper = ApiResponseWrapper<Post>(Post("hhh"))
                 liveData.value = apiResponseWrapper
                 // post = getPostFromCloud
                 //if post == null or return error, ApiResponseWrapper setstatus error

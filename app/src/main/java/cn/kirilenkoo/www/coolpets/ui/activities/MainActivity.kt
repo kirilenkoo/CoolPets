@@ -25,11 +25,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : BaseActivity()
-//        , HasSupportFragmentInjector
+        , HasSupportFragmentInjector
 {
-//    @Inject
-//    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
-//    override fun supportFragmentInjector() = dispatchingAndroidInjector
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    override fun supportFragmentInjector() = dispatchingAndroidInjector
     @Inject lateinit var mPet:Pet
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

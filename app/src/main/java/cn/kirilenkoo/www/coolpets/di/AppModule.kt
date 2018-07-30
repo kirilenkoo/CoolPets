@@ -2,6 +2,6 @@ package cn.kirilenkoo.www.coolpets.di
 
 import dagger.Module
 
-@Module
+@Module(includes = [ViewModelModule::class])
 class AppModule {
 }
