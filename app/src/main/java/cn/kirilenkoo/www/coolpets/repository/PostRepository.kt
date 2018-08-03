@@ -33,10 +33,6 @@ class PostRepository @Inject constructor(private val appExecutor : AppExecutors)
                 val liveData = MutableLiveData<ApiResponseWrapper<Post>>()
                 val apiResponseWrapper = ApiResponseWrapper<Post>(Post("hhh"))
                 liveData.value = apiResponseWrapper
-                // post = getPostFromCloud
-                //if post == null or return error, ApiResponseWrapper setstatus error
-                //else apiresponseWrapper setbody post
-
                 return liveData
             }
 

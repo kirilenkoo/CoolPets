@@ -14,14 +14,4 @@ import timber.log.Timber
  * Created by huangzilong on 2018/3/22.
  */
 class CommentRepository{
-    /*override */fun fetchData(params: HashMap<String, Any>): Single<*> {
-        val srcObservable: Single<List<Comment>> = NetworkDataSource.fetchPostComments(params["postId"] as String?).cache()
-        srcObservable.subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe (
-                        {result -> Log.d("save","size %s comments save to db"+result.size)},
-                        {error -> Log.d("error",error.message)}
-                )
-        return srcObservable
-    }
 }

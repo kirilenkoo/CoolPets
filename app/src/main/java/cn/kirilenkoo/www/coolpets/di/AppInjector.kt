@@ -52,9 +52,9 @@ object AppInjector {
     }
 
     private fun handleActivity(activity: Activity) {
-//        if (activity is HasSupportFragmentInjector) {
+        if (activity is HasSupportFragmentInjector) {
             AndroidInjection.inject(activity)
-//        }
+        }
         if (activity is FragmentActivity) {
             activity.supportFragmentManager
                     .registerFragmentLifecycleCallbacks(

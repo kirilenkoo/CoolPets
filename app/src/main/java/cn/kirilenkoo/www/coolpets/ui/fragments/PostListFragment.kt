@@ -59,27 +59,5 @@ class PostListFragment : BaseFragment(), Injectable {
         })
 
     }
-
-//    fun testLiveData(){
-//        Timber.d("test")
-//        val liveData = MutableLiveData<ApiResponseWrapper<Post>>()
-//        liveData.observe(this, Observer {
-//            Timber.d( "get")
-//            var status = it?.status
-//            var post = it?.data as Post
-//            Timber.d("%s, %s", status, System.currentTimeMillis())
-//            Timber.d("%s, %s", post.title, System.currentTimeMillis())
-//        })
-//        val apiResponseWrapper = ApiResponseWrapper<Post>()
-//        liveData.value = apiResponseWrapper
-//
-////        Thread(Runnable {
-////            Thread.sleep(3000)
-////
-////            apiResponseWrapper.status = "load"
-////            val list = listOf<PostContent>()
-////            apiResponseWrapper.data = Post("title", list)
-////        }.toString())
-//    }
 }
 

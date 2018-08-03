@@ -12,6 +12,7 @@ import io.reactivex.Single
 /**
  * Created by huangzilong on 2018/3/22.
  */
+@Deprecated("use NetWorkBoundResource")
 class NetworkDataSource {
     companion object {
         fun fetchTags(): Observable<List<Tag>> {

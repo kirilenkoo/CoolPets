@@ -25,12 +25,12 @@ class BaseApplication: Application(), HasActivityInjector {
         super.onCreate()
         init3party()
         initDagger()
-        Timber.plant(Timber.DebugTree())
+        initTimber()
     }
 
-    private fun initDagger() {
-        AppInjector.init(this)
-    }
+    private fun initTimber() = Timber.plant(Timber.DebugTree())
+
+    private fun initDagger() = AppInjector.init(this)
 
     private fun init3party(){
         // 初始化参数依次为 this, AppId, AppKey

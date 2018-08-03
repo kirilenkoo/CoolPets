@@ -9,6 +9,9 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
 android {
     compileSdkVersion 26
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "cn.kirilenkoo.www.coolpets"
         minSdkVersion 15

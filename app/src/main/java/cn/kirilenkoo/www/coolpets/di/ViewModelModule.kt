@@ -18,7 +18,6 @@ package cn.kirilenkoo.www.coolpets.di
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import cn.kirilenkoo.www.coolpets.viewmodel.CoolPetViewModelFactory
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
 import dagger.Binds
 import dagger.Module

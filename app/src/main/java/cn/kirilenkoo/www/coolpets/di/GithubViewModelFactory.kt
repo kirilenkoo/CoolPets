@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.kirilenkoo.www.coolpets.viewmodel
+package cn.kirilenkoo.www.coolpets.di
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
