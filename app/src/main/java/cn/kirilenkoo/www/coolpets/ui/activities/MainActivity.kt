@@ -2,27 +2,11 @@ package cn.kirilenkoo.www.coolpets.ui.activities
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseActivity
-import cn.kirilenkoo.www.coolpets.model.Comment
-import cn.kirilenkoo.www.coolpets.model.LeetCode
 import cn.kirilenkoo.www.coolpets.model.Pet
-import cn.kirilenkoo.www.coolpets.model.Post
-import cn.kirilenkoo.www.coolpets.repository.CommentRepository
-import com.avos.avoscloud.AVObject
-import dagger.Component
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : BaseActivity()
