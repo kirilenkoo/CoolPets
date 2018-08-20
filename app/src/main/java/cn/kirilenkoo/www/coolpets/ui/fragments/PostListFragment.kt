@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,15 +35,15 @@ class PostListFragment : BaseFragment(), Injectable {
         postListViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(PostListViewModel::class.java)
         postListViewModel.initData()
-        postListViewModel.postListData.observe(this, Observer<Resource<Post>> {
+        postListViewModel.postListData.observe(this, Observer<Resource<List<Post>>> {
             it?.data?.let {
-                Timber.d("${it.title}")
+                for(post in it){
+                    Timber.d("${post.title}")
+                }
+
             }
         })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }
 

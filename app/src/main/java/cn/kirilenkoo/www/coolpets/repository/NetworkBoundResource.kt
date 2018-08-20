@@ -18,13 +18,14 @@ package cn.kirilenkoo.www.coolpets.repository
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
-import cn.kirilenkoo.www.coolpets.api.ApiResponseWrapper
-import cn.kirilenkoo.www.coolpets.model.Post
-import com.android.example.github.vo.Resource
+import cn.kirilenkoo.www.coolpets.api.ApiEmptyResponse
+import cn.kirilenkoo.www.coolpets.api.ApiErrorResponse
+import cn.kirilenkoo.www.coolpets.api.ApiResponse
+import cn.kirilenkoo.www.coolpets.api.ApiSuccessResponse
 import cn.kirilenkoo.www.coolpets.util.AppExecutors
+import com.android.example.github.vo.Resource
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
  *
@@ -71,36 +72,38 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)
             result.removeSource(dbSource)
-            setValue(Resource.success(response?.data as ResultType))
-//            when (response) {
-//                is ApiSuccessResponse -> {
-//                    appExecutors.diskIO().execute {
-//                        saveCallResult(processResponse(response))
-//                        appExecutors.mainThread().execute {
-//                            // we specially request a new live data,
-//                            // otherwise we will get immediately last cached value,
-//                            // which may not be updated with latest results received from network.
-//                            result.addSource(loadFromDb()) { newData ->
-//                                setValue(Resource.success(newData))
-//                            }
-//                        }
-//                    }
-//                }
-//                is ApiEmptyResponse -> {
-//                    appExecutors.mainThread().execute {
-//                        // reload from disk whatever we had
-//                        result.addSource(loadFromDb()) { newData ->
-//                            setValue(Resource.success(newData))
-//                        }
-//                    }
-//                }
-//                is ApiErrorResponse -> {
-//                    onFetchFailed()
-//                    result.addSource(dbSource) { newData ->
-//                        setValue(Resource.error(response.errorMessage, newData))
-//                    }
-//                }
-//            }
+//            setValue(Resource.success(response?.data as ResultType))
+            when (response) {
+                is ApiSuccessResponse -> {
+                    appExecutors.diskIO().execute {
+                        saveCallResult(processResponse(response))
+                        appExecutors.mainThread().execute {
+                            // we specially request a new live data,
+                            // otherwise we will get immediately last cached value,
+                            // which may not be updated with latest results received from network.
+                            //我们特意请求新的实时数据，否则我们将立即获得最后缓存的值，这可能无法使用从网络收到的最新结果进行更新。
+                            //这里先存储网络数据，再重新获取，是因为有可能要返回的数据是网络和本地数据混排的
+                            result.addSource(loadFromDb()) { newData ->
+                                setValue(Resource.success(newData))
+                            }
+                        }
+                    }
+                }
+                is ApiEmptyResponse -> {
+                    appExecutors.mainThread().execute {
+                        // reload from disk whatever we had
+                        result.addSource(loadFromDb()) { newData ->
+                            setValue(Resource.success(newData))
+                        }
+                    }
+                }
+                is ApiErrorResponse -> {
+                    onFetchFailed()
+                    result.addSource(dbSource) { newData ->
+                        setValue(Resource.error(response.errorMessage, newData))
+                    }
+                }
+            }
         }
     }
 
@@ -109,7 +112,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     fun asLiveData() = result as LiveData<Resource<ResultType>>
 
     @WorkerThread
-    protected open fun processResponse(apiResponse: ApiResponseWrapper<RequestType>) = apiResponse
+    protected open fun processResponse(apiResponse: ApiSuccessResponse<RequestType>) = apiResponse.body
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)
@@ -121,5 +124,5 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     protected abstract fun loadFromDb(): LiveData<ResultType>
 
     @MainThread
-    protected abstract fun createCall(): LiveData<ApiResponseWrapper<RequestType>>
+    protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
 }
