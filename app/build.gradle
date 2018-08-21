@@ -78,7 +78,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     //room
     implementation "android.arch.persistence.room:runtime:$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$room_version" // use kapt for Kotlin
+    kapt "android.arch.persistence.room:compiler:$room_version"
     // optional - RxJava support for Room
     implementation "android.arch.persistence.room:rxjava2:$room_version"
     //dagger

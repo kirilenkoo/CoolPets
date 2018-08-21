@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseFragment
 import cn.kirilenkoo.www.coolpets.di.Injectable
-import cn.kirilenkoo.www.coolpets.model.Post
+import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
 import com.android.example.github.vo.Resource
 import timber.log.Timber
@@ -35,10 +35,11 @@ class PostListFragment : BaseFragment(), Injectable {
         postListViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(PostListViewModel::class.java)
         postListViewModel.initData()
-        postListViewModel.postListData.observe(this, Observer<Resource<List<Post>>> {
+        postListViewModel.postListData.observe(this, Observer<Resource<List<PostWithContents>>> {
             it?.data?.let {
-                for(post in it){
-                    Timber.d("${post.title}")
+                for(pwc in it){
+                    Timber.d("${pwc.post.title}")
+                    Timber.d("${pwc.contentList.size}")
                 }
 
             }

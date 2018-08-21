@@ -3,7 +3,10 @@ package cn.kirilenkoo.www.coolpets.util
 import android.arch.lifecycle.MutableLiveData
 import cn.kirilenkoo.www.coolpets.api.ApiResponse
 import cn.kirilenkoo.www.coolpets.model.Post
+import cn.kirilenkoo.www.coolpets.model.PostContent
+import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import timber.log.Timber
+import java.util.*
 
 fun mockGetPosts (page : Int, appExecutors: AppExecutors):MutableLiveData<ApiResponse<List<Post>>>{
     val liveData = MutableLiveData<ApiResponse<List<Post>>>()
@@ -11,7 +14,7 @@ fun mockGetPosts (page : Int, appExecutors: AppExecutors):MutableLiveData<ApiRes
         Thread.sleep(2000)
         val posts: ArrayList<Post> = ArrayList()
         for ( i in 1..10){
-            posts.add(Post(title = "$i"))
+            posts.add(Post(postId = generatePostId(), title = "$i"))
         }
         appExecutors.mainThread().execute{
             liveData.value = ApiResponse.create(posts)
@@ -21,3 +24,27 @@ fun mockGetPosts (page : Int, appExecutors: AppExecutors):MutableLiveData<ApiRes
     Timber.d("%s : return live data time", System.currentTimeMillis())
     return liveData
 }
+
+fun mockGetPostsWithContents(page : Int, appExecutors: AppExecutors): MutableLiveData<ApiResponse<List<PostWithContents>>>{
+    val liveData = MutableLiveData<ApiResponse<List<PostWithContents>>>()
+    Thread {
+        Thread.sleep(2000)
+        val posts: ArrayList<PostWithContents> = ArrayList()
+        for ( i in 1..3){
+            val pwc = PostWithContents()
+            pwc.post = Post(generatePostId(),"$i")
+            val postContents = arrayListOf<PostContent>()
+            for (j in 0..5){
+                postContents.add(PostContent(postId = pwc.post.postId,contentId = generatePostId(),text = "$j"))
+            }
+            pwc.contentList = postContents
+            posts.add(pwc)
+        }
+        appExecutors.mainThread().execute{
+            liveData.value = ApiResponse.create(posts)
+        }
+    }.start()
+    return liveData
+}
+
+fun generatePostId():String = UUID.randomUUID().toString()
