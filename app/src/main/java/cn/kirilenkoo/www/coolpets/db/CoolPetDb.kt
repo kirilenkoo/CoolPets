@@ -8,7 +8,7 @@ import cn.kirilenkoo.www.coolpets.model.PostContent
 @Database(
         entities = [
             Post::class,
-        PostContent::class],
+            PostContent::class],
         version = 2,
         exportSchema = true
 )

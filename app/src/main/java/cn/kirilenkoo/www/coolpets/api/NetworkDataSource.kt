@@ -13,19 +13,19 @@ import io.reactivex.Single
 @Deprecated("use NetWorkBoundResource")
 class NetworkDataSource {
     companion object {
-        fun fetchTags(): Observable<List<Tag>> {
-            return Observable.create<List<Tag>> {
-                val avList = AVQuery<AVObject>("Tag").find()
-                val tagList = avList.mapNotNull {
-                    it.getString("name")?.let {
-                        Tag(it)
-                    }
-                }
-                it.onNext(
-                        tagList
-                )
-            }
-        }
+//        fun fetchTags(): Observable<List<Tag>> {
+//            return Observable.create<List<Tag>> {
+//                val avList = AVQuery<AVObject>("Tag").find()
+//                val tagList = avList.mapNotNull {
+//                    it.getString("name")?.let {
+//                        Tag(it)
+//                    }
+//                }
+//                it.onNext(
+//                        tagList
+//                )
+//            }
+//        }
 
 //        fun fetchPosts(): Observable<List<Post>> {
 //            return Observable.create<List<Post>> {

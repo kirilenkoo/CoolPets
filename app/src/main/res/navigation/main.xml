@@ -2,12 +2,16 @@
 
 <navigation xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    app:startDestination="@id/postListFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/postListFragment"
         android:name="cn.kirilenkoo.www.coolpets.ui.fragments.PostListFragment"
         android:label="PostListFragment" >
     </fragment>
-
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="cn.kirilenkoo.www.coolpets.ui.fragments.MainFragment"
+        android:label="MainFragment" >
+    </fragment>
 </navigation>

@@ -15,11 +15,11 @@ class MainActivity : BaseActivity()
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
     override fun supportFragmentInjector() = dispatchingAndroidInjector
-    @Inject lateinit var mPet:Pet
+//    @Inject lateinit var mPet:Pet
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mPet.call()
+//        mPet.call()
 //        val rep = CommentRepository()
 //        val params = HashMap<String, Any>()
 //        params["postId"] = "5aba0f317565710045876558"

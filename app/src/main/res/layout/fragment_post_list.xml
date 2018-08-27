@@ -4,13 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.PostListFragment">
-
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 </FrameLayout>

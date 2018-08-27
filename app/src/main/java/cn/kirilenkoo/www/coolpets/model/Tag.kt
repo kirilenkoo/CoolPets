@@ -6,10 +6,7 @@ import javax.inject.Inject
 /**
  * Created by huangzilong on 2018/3/22.
  */
-class Tag @Inject constructor(){
-    constructor(name: String) : this(){
-
-    }
+data class Tag @Inject constructor (val tagId: Int = 0, val name: String = "", val url: String?){
     fun showTag(){
         Log.d("tag", "this is a tag call")
     }
