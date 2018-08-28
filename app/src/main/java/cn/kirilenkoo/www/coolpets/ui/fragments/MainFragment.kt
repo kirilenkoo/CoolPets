@@ -42,7 +42,7 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.viewPager.adapter = MyCommonPagerAdapter(fragmentManager!!)
+        binding.viewPager.adapter = MyCommonPagerAdapter(childFragmentManager!!)
         val url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536045875&di=f68c995ef8eeb805d26190cd9a09850b&imgtype=jpg&er=1&src=http%3A%2F%2Fwww.free-icons-download.net%2Fimages%2Fweb-music-icon-84012.png"
         val tag1 = Tag(name = "turtle", url = url)
         val tag2 = Tag(name = "reptile", url = url)
