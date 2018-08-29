@@ -10,7 +10,10 @@
         <cn.kirilenkoo.www.coolpets.ui.view.CoolPetHeaderView
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"

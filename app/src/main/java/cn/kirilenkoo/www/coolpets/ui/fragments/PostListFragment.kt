@@ -33,6 +33,14 @@ class PostListFragment : BaseFragment(), Injectable {
 
     lateinit var recyclerView: RecyclerView
 
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if(parentFragment is FragmentFinishedCallback){
+            listener = parentFragment as FragmentFinishedCallback
+        }
+    }
+
     override fun onDetach() {
         super.onDetach()
         listener = null
@@ -41,9 +49,6 @@ class PostListFragment : BaseFragment(), Injectable {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        if(parentFragment is FragmentFinishedCallback){
-            listener = parentFragment as FragmentFinishedCallback
-        }
         val view = inflater.inflate(R.layout.fragment_post_list, container, false)
         recyclerView = view.findViewById(R.id.recyclerView)
         return view
