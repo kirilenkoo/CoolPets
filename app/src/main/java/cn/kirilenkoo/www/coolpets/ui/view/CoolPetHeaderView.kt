@@ -1,14 +1,14 @@
 package cn.kirilenkoo.www.coolpets.ui.view
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Path
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import cn.kirilenkoo.www.coolpets.R
@@ -17,7 +17,6 @@ import cn.kirilenkoo.www.coolpets.thirdparty.GlideApp
 import cn.kirilenkoo.www.coolpets.util.convertDp2Px
 import timber.log.Timber
 import java.lang.ref.WeakReference
-import kotlin.math.exp
 import kotlin.math.pow
 
 class CoolPetHeaderView @JvmOverloads constructor(
@@ -26,12 +25,14 @@ class CoolPetHeaderView @JvmOverloads constructor(
     private lateinit var mTags: List<Tag>
     private lateinit var mViewPager: ViewPager
     private var mTagViews = arrayOfNulls<ImageView>(3)
+    private val mExpandSensitive  = 3
     private val mOnScrollListener = object: RecyclerView.OnScrollListener(){
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            if(dy>0){//scroll down
+            if(isAnimating) return
+            if(dy>mExpandSensitive){//scroll up
                 collapse(dy)
-            }else{// scroll up
+            }else if(dy<-mExpandSensitive){// scroll down
                 expand(dy)
             }
         }
@@ -73,6 +74,9 @@ class CoolPetHeaderView @JvmOverloads constructor(
             addView(tagView, flp)
             mTagViews[i] = tagView
         }
+        mTagViews[1]!!.setOnClickListener{
+            Timber.d("clicked")
+        }
     }
     private var initTopY: Float? = null
     private var initBottomY: Float? = null
@@ -87,31 +91,45 @@ class CoolPetHeaderView @JvmOverloads constructor(
     private var maxHeight : Int? = null
 
 
+
     fun setViewPager(viewPager: ViewPager){
         mViewPager = viewPager
         mViewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
+                Timber.d("state: $state")
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
-//                Timber.d("position: $position | positionOffset: $positionOffset | offsetPixels: $positionOffsetPixels")
+                Timber.d("position: $position | positionOffset: $positionOffset")
                 val centerxypair = generateCenterXY(position, positionOffset)
-                mTagViews[1]?.layoutParams = mTagViews[1]?.layoutParams.also {
-                    it!!.width = centerxypair[2].toInt()
-                    it!!.height = centerxypair[2].toInt()
-                }
+                mTagViews[1]?.layoutParams!!.width = centerxypair[2].toInt()
+                mTagViews[1]?.layoutParams!!.height = centerxypair[2].toInt()
                 mTagViews[1]?.x = centerxypair[0]-mTagViews[1]?.width!!/2
                 mTagViews[1]?.y = centerxypair[1]-mTagViews[1]?.width!!/2
+                mTagViews[1]?.requestLayout()
 
+                mTagViews[2]?.layoutParams!!.width = centerxypair[5].toInt()
+                mTagViews[2]?.layoutParams!!.height = centerxypair[5].toInt()
+                mTagViews[2]?.x = centerxypair[3]-mTagViews[2]?.width!!/2
+                mTagViews[2]?.y = centerxypair[4]-mTagViews[2]?.width!!/2
+                mTagViews[2]?.requestLayout()
+
+                mTagViews[0]?.layoutParams!!.width = centerxypair[8].toInt()
+                mTagViews[0]?.layoutParams!!.height = centerxypair[8].toInt()
+                mTagViews[0]?.x = centerxypair[6]-mTagViews[0]?.width!!/2
+                mTagViews[0]?.y = centerxypair[7]-mTagViews[0]?.width!!/2
+                mTagViews[0]?.requestLayout()
             }
 
             override fun onPageSelected(position: Int) {
+                Timber.d("selected: $position")
             }
 
         })
     }
-
+    lateinit var collapseAnimator: ValueAnimator
+    lateinit var expandAnimator: ValueAnimator
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         if (initTopY == null){
@@ -121,8 +139,57 @@ class CoolPetHeaderView @JvmOverloads constructor(
             initRightX = mTagViews[2]?.x
             initXhalfLength = initMiddleX!!+initLWidth!!/2-initLeftX!!-initSWidth!!/2
             maxHeight = layoutParams.height
+            collapseAnimator = ValueAnimator.ofInt(maxHeight!!, minHeight)
+            collapseAnimator.addUpdateListener {
+                val h= it.animatedValue as Int
+                this.layoutParams.height = h
+                this.requestLayout()
+            }
+            collapseAnimator.addListener(object : Animator.AnimatorListener{
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    isAnimating = false
+                    isExpand = false
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                    isAnimating = true
+                }
+
+            })
+            collapseAnimator.duration = 300
+            expandAnimator = ValueAnimator.ofInt(minHeight, maxHeight!!)
+            expandAnimator.addUpdateListener {
+                val h= it.animatedValue as Int
+                this.layoutParams.height = h
+                this.requestLayout()
+            }
+            expandAnimator.addListener(object : Animator.AnimatorListener{
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    isAnimating = false
+                    isExpand = true
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                    isAnimating = true
+                }
+
+            })
+            expandAnimator.duration = 300
         }
-        initBottomY = mTagViews[0]?.y
+//        initBottomY = mTagViews[0]?.y
+        initBottomY = height-initSWidth!!
         initA = (initBottomY!!+initSWidth!!/2-initTopY!!-initLWidth!!/2)/initXhalfLength!!.pow(2)
     }
 
@@ -141,7 +208,30 @@ class CoolPetHeaderView @JvmOverloads constructor(
             1 -> initLWidth!! - (positionOffset)*(initLWidth!!-initSWidth!!)
             else -> initSWidth!!
         }
-        return arrayOf(xCenter,yCenter, width)
+
+        val xRightCenter = when (xCenter){
+            in (initSWidth!!/2 .. (initMiddleX!!+initLWidth!!/2)) -> 2*initXhalfLength!!+initSWidth!!-(initXhalfLength!!+initSWidth!!-xCenter)
+            else -> 2*initXhalfLength!!+initSWidth!!/2
+        }
+        val yRightCenter = initA!!*(initMiddleX!!+initLWidth!!/2 - xRightCenter).pow(2)+initLWidth!!/2
+        val widthRight = when (position) {
+//            0 -> initLWidth!! - (1f-positionOffset)*(initLWidth!!-initSWidth!!)
+            1 -> initSWidth!! + (positionOffset)*(initLWidth!!-initSWidth!!)
+            2 -> initLWidth!!
+            else -> initSWidth!!
+        }
+
+        val xLeftCenter = when (xCenter){
+            in ((initMiddleX!!+initLWidth!!/2)..2*initXhalfLength!!+initSWidth!!/2) -> initSWidth!!/2+(xCenter-initMiddleX!!-initLWidth!!/2)
+            else -> initSWidth!!/2
+        }
+        val yLeftCenter = initA!!*(initMiddleX!!+initLWidth!!/2 - xLeftCenter).pow(2)+initLWidth!!/2
+        val widthLeft = when (position) {
+            0 -> initSWidth!! + (1f-positionOffset)*(initLWidth!!-initSWidth!!)
+            else -> initSWidth!!
+        }
+
+        return arrayOf(xCenter,yCenter, width, xRightCenter, yRightCenter, widthRight, xLeftCenter, yLeftCenter, widthLeft)
     }
 
     fun addBottomView(view: View){
@@ -156,16 +246,21 @@ class CoolPetHeaderView @JvmOverloads constructor(
         }
     }
 
+
+
+    var isExpand = true
+    var isAnimating = false
     fun collapse(dy: Int){
         Timber.d("collapsing : $dy / $height ")
-        this.layoutParams = this.layoutParams.also {
-            if(it.height-dy > minHeight) it.height = it.height-dy
+        if(isExpand and !isAnimating){
+            collapseAnimator.start()
         }
+
     }
     fun expand(dy: Int){
-        Timber.d( " expanding : $dy / $height")
-        this.layoutParams = this.layoutParams.also {
-            if(it.height-dy < maxHeight!!) it.height = it.height-dy
+        if(!isExpand and !isAnimating){
+            expandAnimator.start()
         }
+        Timber.d( " expanding : $dy / $height")
     }
 }
