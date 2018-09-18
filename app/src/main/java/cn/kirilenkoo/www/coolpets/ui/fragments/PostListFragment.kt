@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.databinding.DataBindingComponent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -14,8 +15,13 @@ import android.view.View
 import android.view.ViewGroup
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseFragment
+import cn.kirilenkoo.www.coolpets.binding.FragmentDataBindingComponent
 import cn.kirilenkoo.www.coolpets.di.Injectable
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
+import cn.kirilenkoo.www.coolpets.ui.adapter.PostAdapter
+import cn.kirilenkoo.www.coolpets.util.AppExecutors
+import cn.kirilenkoo.www.coolpets.util.AutoClearedValue
+import cn.kirilenkoo.www.coolpets.util.autoCleared
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
 import com.android.example.github.vo.Resource
 import timber.log.Timber
@@ -28,6 +34,8 @@ class PostListFragment : BaseFragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var appExecutors: AppExecutors
 
     lateinit var postListViewModel: PostListViewModel
 
@@ -55,38 +63,35 @@ class PostListFragment : BaseFragment(), Injectable {
     }
 
     var posts = listOf<PostWithContents>()
+    var dataBindingComponent = FragmentDataBindingComponent(this)
 
-
+    private var adapter by autoCleared<PostAdapter>()
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = Adapter()
+        val adapter = PostAdapter(dataBindingComponent, appExecutors){
+
+        }
+        this.adapter = adapter
+        recyclerView.adapter = adapter
+
         postListViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(PostListViewModel::class.java)
         postListViewModel.initData()
         postListViewModel.postListData.observe(this, Observer<Resource<List<PostWithContents>>> {
-            it?.data?.let {
-                for(pwc in it){
-                    Timber.d("${pwc.post.title}")
-                    Timber.d("${pwc.contentList.size}")
-                }
-                posts = it
-                recyclerView.adapter.notifyDataSetChanged()
-            }
+//            it?.data?.let {
+//                for(pwc in it){
+//                    Timber.d("${pwc.post.title}")
+//                    Timber.d("${pwc.contentList.size}")
+//                }
+//                adapter.submitList()
+//                recyclerView.adapter.notifyDataSetChanged()
+//            }
+            adapter.submitList(it?.data)
         })
         listener?.finished(this)
-    }
-
-    inner class Adapter: RecyclerView.Adapter<ViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-                ViewHolder(LayoutInflater.from(activity).inflate(R.layout.card_main_hub_long_post_light,parent,false))
-
-        override fun getItemCount(): Int = posts.size
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        }
 
     }
-    class ViewHolder (view: View): RecyclerView.ViewHolder(view)
+
 }
 

@@ -124,6 +124,23 @@ class CoolPetHeaderView @JvmOverloads constructor(
 
             override fun onPageSelected(position: Int) {
                 Timber.d("selected: $position")
+                when (position){
+                    0 -> {
+                        (mTagViews[0]?.layoutParams!! as LayoutParams).gravity = Gravity.TOP
+                        (mTagViews[1]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                        (mTagViews[2]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                    }
+                    1 -> {
+                        (mTagViews[0]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                        (mTagViews[1]?.layoutParams!! as LayoutParams).gravity = Gravity.TOP
+                        (mTagViews[2]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                    }
+                    2-> {
+                        (mTagViews[0]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                        (mTagViews[1]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                        (mTagViews[2]?.layoutParams!! as LayoutParams).gravity = Gravity.TOP
+                    }
+                }
             }
 
         })
