@@ -51,8 +51,7 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
         val tag2 = Tag(name = "reptile", url = url)
         val tag3 = Tag(name = "frog", url = url)
         val tags = arrayListOf(tag1, tag2, tag3)
-        binding.header.setupPagerAction(tags, binding.viewPager)
-        binding.header.addBottomView(binding.bottomBar)
+        binding.header.setupPagerAction(tags, binding.viewPager, binding.bottomBar)
         binding.bottomBar.getChildAt(1).setOnClickListener { Timber.d("bottom") }
     }
 

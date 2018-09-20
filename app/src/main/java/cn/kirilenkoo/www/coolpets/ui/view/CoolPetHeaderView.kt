@@ -42,38 +42,56 @@ class CoolPetHeaderView @JvmOverloads constructor(
         }
     }
     private lateinit var mBottomViewWrapper: WeakReference<View>
-    private lateinit var mTextView: TextView
+    private var mTextView: TextView = TextView(context)
+
+    private var initTopY: Float? = null
+    private var initBottomY: Float? = null
+    private var initLeftX: Float? = null
+    private var initMiddleX: Float? = null
+    private var initRightX: Float? = null
+    private var initA: Float? = null
+    private var initLWidth: Float? = null
+    private var initSWidth: Float? = null
+    private var initXhalfLength: Float? = null
+    private val minHeight = convertDp2Px(40,context)
+    private var maxHeight : Int? = null
+    private lateinit var collapseAnimator: ValueAnimator
+    private lateinit var expandAnimator: ValueAnimator
+    private val animDuration = context.resources.getInteger(R.integer.anim_duration).toLong()
+
     init {
-        mTextView = TextView(context)
         mTextView.setTextColor(Color.WHITE)
         val flp = FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT).also { it.gravity = Gravity.CENTER or Gravity.BOTTOM }
         addView(mTextView,flp)
     }
 
-
-    fun setupPagerAction(tags: List<Tag>, viewPager: ViewPager){
+    fun setupPagerAction(tags: List<Tag>, viewPager: ViewPager, bottomView: View){
         setTags(tags)
         setViewPager(viewPager)
+        setBottomView(bottomView)
     }
+
     fun setTags(tags: List<Tag>){
         val tabStatics = arrayOf(R.drawable.icon_tab_butterfly, R.drawable.icon_tab_turtle, R.drawable.icon_tab_frog)
         mTags = tags
         val paddingHorizontal = convertDp2Px(20,context)
         val paddingVertical = convertDp2Px(12,context)
         val height = layoutParams.height
-        initLWidth = (height/3).toFloat()
-        initSWidth = (height/4).toFloat()
+        val largeInt = height/2
+        val smallInt = height/4
+        initLWidth = largeInt.toFloat()
+        initSWidth = smallInt.toFloat()
         for(i in 0..2){
             val flp = when (i){
-                0 -> FrameLayout.LayoutParams(height/4,height/4).also {
+                0 -> FrameLayout.LayoutParams(smallInt,smallInt).also {
 //                    it.setMargins(paddingHorizontal,0,0,paddingVertical)
                     it.gravity = Gravity.BOTTOM
                 }
-                1 -> FrameLayout.LayoutParams(height/3, height/3).also {
+                1 -> FrameLayout.LayoutParams(largeInt, largeInt).also {
 //                    it.setMargins(0, paddingVertical,0,0)
                     it.gravity = Gravity.CENTER or Gravity.TOP
                 }
-                else -> FrameLayout.LayoutParams( height/4, height/4).also {
+                else -> FrameLayout.LayoutParams( smallInt, smallInt).also {
 //                    it.setMargins(0,0,paddingHorizontal,paddingVertical)
                     it.gravity = Gravity.RIGHT or Gravity.BOTTOM
                 }
@@ -84,24 +102,8 @@ class CoolPetHeaderView @JvmOverloads constructor(
             addView(tagView, flp)
             mTagViews[i] = tagView
         }
-        mTagViews[1]!!.setOnClickListener{
-            Timber.d("clicked")
-        }
         mTextView.text = mTags[1].name
     }
-    private var initTopY: Float? = null
-    private var initBottomY: Float? = null
-    private var initLeftX: Float? = null
-    private var initMiddleX: Float? = null
-    private var initRightX: Float? = null
-    private var initA: Float? = null
-    private var initLWidth: Float? = null
-    private var initSWidth: Float? = null
-    private var initXhalfLength: Float? = null
-    private val minHeight = convertDp2Px(50,context)
-    private var maxHeight : Int? = null
-
-
 
     fun setViewPager(viewPager: ViewPager){
         mViewPager = viewPager
@@ -156,9 +158,13 @@ class CoolPetHeaderView @JvmOverloads constructor(
             }
 
         })
+        for (i in 0..2){
+            mTagViews[i]?.setOnClickListener {
+                mViewPager.setCurrentItem(i,true)
+            }
+        }
     }
-    lateinit var collapseAnimator: ValueAnimator
-    lateinit var expandAnimator: ValueAnimator
+
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         if (initTopY == null){
@@ -188,10 +194,11 @@ class CoolPetHeaderView @JvmOverloads constructor(
 
                 override fun onAnimationStart(animation: Animator?) {
                     isAnimating = true
+                    mTextView.startAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_out))
                 }
 
             })
-            collapseAnimator.duration = 300
+            collapseAnimator.duration = animDuration
             expandAnimator = ValueAnimator.ofInt(minHeight, maxHeight!!)
             expandAnimator.addUpdateListener {
                 val h= it.animatedValue as Int
@@ -212,16 +219,20 @@ class CoolPetHeaderView @JvmOverloads constructor(
 
                 override fun onAnimationStart(animation: Animator?) {
                     isAnimating = true
+                    mTextView.startAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_in))
                 }
 
             })
-            expandAnimator.duration = 300
+            expandAnimator.duration = animDuration
         }
 //        initBottomY = mTagViews[0]?.y
         initBottomY = height-initSWidth!!
         initA = (initBottomY!!+initSWidth!!/2-initTopY!!-initLWidth!!/2)/initXhalfLength!!.pow(2)
     }
 
+    private fun setBottomView(bottomView: View) {
+        mBottomViewWrapper = WeakReference(bottomView)
+    }
 
     private fun generateCenterXY(position: Int, positionOffset: Float): Array<Float> {
         //position = 0, offset = 0 , x = middlex, y = topy: position = 0, offset = 1, x = rightx, y = bottomy
@@ -261,10 +272,6 @@ class CoolPetHeaderView @JvmOverloads constructor(
         }
 
         return arrayOf(xCenter,yCenter, width, xRightCenter, yRightCenter, widthRight, xLeftCenter, yLeftCenter, widthLeft)
-    }
-
-    fun addBottomView(view: View){
-        mBottomViewWrapper = WeakReference(view)
     }
 
     fun addScrollChildFragment(fragment: Fragment){
