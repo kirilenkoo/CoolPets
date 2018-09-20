@@ -18,6 +18,7 @@ import cn.kirilenkoo.www.coolpets.di.Injectable
 import cn.kirilenkoo.www.coolpets.model.Tag
 import cn.kirilenkoo.www.coolpets.ui.view.CoolPetHeaderView
 import cn.kirilenkoo.www.coolpets.util.autoCleared
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -51,6 +52,8 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
         val tag3 = Tag(name = "frog", url = url)
         val tags = arrayListOf(tag1, tag2, tag3)
         binding.header.setupPagerAction(tags, binding.viewPager)
+        binding.header.addBottomView(binding.bottomBar)
+        binding.bottomBar.getChildAt(1).setOnClickListener { Timber.d("bottom") }
     }
 
     class MyCommonPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {

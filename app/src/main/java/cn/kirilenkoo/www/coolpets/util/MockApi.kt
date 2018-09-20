@@ -30,7 +30,7 @@ fun mockGetPostsWithContents(page : Int, appExecutors: AppExecutors): MutableLiv
     Thread {
         Thread.sleep(2000)
         val posts: ArrayList<PostWithContents> = ArrayList()
-        for ( i in 1..3){
+        for ( i in 1..1){
             val pwc = PostWithContents()
             pwc.post = Post(generatePostId(),"$i")
             val postContents = arrayListOf<PostContent>()

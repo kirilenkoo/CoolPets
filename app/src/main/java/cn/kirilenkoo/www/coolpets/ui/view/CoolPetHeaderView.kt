@@ -3,14 +3,18 @@ package cn.kirilenkoo.www.coolpets.ui.view
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Color
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.model.Tag
 import cn.kirilenkoo.www.coolpets.thirdparty.GlideApp
@@ -38,8 +42,12 @@ class CoolPetHeaderView @JvmOverloads constructor(
         }
     }
     private lateinit var mBottomViewWrapper: WeakReference<View>
+    private lateinit var mTextView: TextView
     init {
-
+        mTextView = TextView(context)
+        mTextView.setTextColor(Color.WHITE)
+        val flp = FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT).also { it.gravity = Gravity.CENTER or Gravity.BOTTOM }
+        addView(mTextView,flp)
     }
 
 
@@ -48,6 +56,7 @@ class CoolPetHeaderView @JvmOverloads constructor(
         setViewPager(viewPager)
     }
     fun setTags(tags: List<Tag>){
+        val tabStatics = arrayOf(R.drawable.icon_tab_butterfly, R.drawable.icon_tab_turtle, R.drawable.icon_tab_frog)
         mTags = tags
         val paddingHorizontal = convertDp2Px(20,context)
         val paddingVertical = convertDp2Px(12,context)
@@ -70,13 +79,15 @@ class CoolPetHeaderView @JvmOverloads constructor(
                 }
             }
             val tagView = ImageView(context)
-            GlideApp.with(context).load(mTags[i].url).into(tagView)
+//            GlideApp.with(context).load(mTags[i].url).into(tagView)
+            GlideApp.with(context).load(tabStatics[i]).centerInside().into(tagView)
             addView(tagView, flp)
             mTagViews[i] = tagView
         }
         mTagViews[1]!!.setOnClickListener{
             Timber.d("clicked")
         }
+        mTextView.text = mTags[1].name
     }
     private var initTopY: Float? = null
     private var initBottomY: Float? = null
@@ -124,6 +135,7 @@ class CoolPetHeaderView @JvmOverloads constructor(
 
             override fun onPageSelected(position: Int) {
                 Timber.d("selected: $position")
+                mTextView.text = mTags[position].name
                 when (position){
                     0 -> {
                         (mTagViews[0]?.layoutParams!! as LayoutParams).gravity = Gravity.TOP
@@ -263,20 +275,32 @@ class CoolPetHeaderView @JvmOverloads constructor(
         }
     }
 
-
-
     var isExpand = true
     var isAnimating = false
     fun collapse(dy: Int){
         Timber.d("collapsing : $dy / $height ")
         if(isExpand and !isAnimating){
             collapseAnimator.start()
+            mBottomViewWrapper.get()?.let {
+                val slideDownAnimator = ValueAnimator.ofFloat(it.y,it.height+it.y)
+                slideDownAnimator.addUpdateListener {
+                    mBottomViewWrapper.get()?.y = it.animatedValue as Float
+                }
+                slideDownAnimator.start()
+            }
         }
 
     }
     fun expand(dy: Int){
         if(!isExpand and !isAnimating){
             expandAnimator.start()
+            mBottomViewWrapper.get()?.let {
+                val slideDownAnimator = ValueAnimator.ofFloat(it.y,it.y-it.height)
+                slideDownAnimator.addUpdateListener {
+                    mBottomViewWrapper.get()?.y = it.animatedValue as Float
+                }
+                slideDownAnimator.start()
+            }
         }
         Timber.d( " expanding : $dy / $height")
     }
