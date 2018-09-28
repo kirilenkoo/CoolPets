@@ -11,18 +11,44 @@
     </data>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="@dimen/card_height_inlist"
         android:background="@color/md_white_1000"
+        app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardUseCompatPadding="true">
-
         <LinearLayout
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:orientation = "vertical">
-            <TextView
+            android:orientation = "horizontal">
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/card_height_inlist"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ph"/>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{post.title}"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/TitleTextViewTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/gap_normal"
+                    android:paddingTop="@dimen/gap_normal"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="@{post.title}"
+                    tools:text="Name"/>
+                <TextView
+                    style="@style/ContentTextViewTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="@dimen/gap_normal"
+                    android:paddingBottom="@dimen/gap_normal"
+                    android:gravity="center"
+                    android:ellipsize="end"
+                    android:text="@{post.title}"
+                    tools:text="Content Content \nContent\nContent\nContent\nContent\nContent\nContent\nContent"/>
+            </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

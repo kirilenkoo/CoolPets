@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_corner_radius">5dp</dimen>
+    <dimen name="card_height_inlist">120dp</dimen>
+    <dimen name="title_text_size">16sp</dimen>
+    <dimen name="content_text_size">14sp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="gap_normal">8dp</dimen>
+    <dimen name="padding_half">8dp</dimen>
+</resources>
