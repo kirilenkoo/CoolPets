@@ -6,7 +6,7 @@
     <data>
         <variable
             name="post"
-            type="cn.kirilenkoo.www.coolpets.model.Post"
+            type="cn.kirilenkoo.www.coolpets.model.PostWithContents"
              />
     </data>
     <android.support.v7.widget.CardView
@@ -36,7 +36,7 @@
                     android:paddingTop="@dimen/gap_normal"
                     android:gravity="center"
                     android:lines="1"
-                    android:text="@{post.title}"
+                    android:text="@{post.post.title}"
                     tools:text="Name"/>
                 <TextView
                     style="@style/ContentTextViewTheme"
@@ -46,7 +46,7 @@
                     android:paddingBottom="@dimen/gap_normal"
                     android:gravity="center"
                     android:ellipsize="end"
-                    android:text="@{post.title}"
+                    android:text="@{post.post.title}"
                     tools:text="Content Content \nContent\nContent\nContent\nContent\nContent\nContent\nContent"/>
             </LinearLayout>
         </LinearLayout>

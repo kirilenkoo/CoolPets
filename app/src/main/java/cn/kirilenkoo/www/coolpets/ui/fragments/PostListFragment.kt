@@ -13,10 +13,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseFragment
 import cn.kirilenkoo.www.coolpets.binding.FragmentDataBindingComponent
 import cn.kirilenkoo.www.coolpets.di.Injectable
+import cn.kirilenkoo.www.coolpets.model.PostContent
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import cn.kirilenkoo.www.coolpets.ui.adapter.PostAdapter
 import cn.kirilenkoo.www.coolpets.util.AppExecutors
@@ -70,7 +72,9 @@ class PostListFragment : BaseFragment(), Injectable {
         super.onActivityCreated(savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         val adapter = PostAdapter(dataBindingComponent, appExecutors){
-
+            var bundle = Bundle()
+            bundle.putParcelable("post", it)
+            Navigation.findNavController(recyclerView).navigate(R.id.postDetailFragment,bundle)
         }
         this.adapter = adapter
         recyclerView.adapter = adapter

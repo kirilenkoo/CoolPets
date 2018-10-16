@@ -108,6 +108,7 @@ class CoolPetHeaderView @JvmOverloads constructor(
     fun setViewPager(viewPager: ViewPager){
         mViewPager = viewPager
         mViewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
+            val tabStatics = arrayOf(R.drawable.icon_tab_butterfly, R.drawable.icon_tab_turtle, R.drawable.icon_tab_frog)
             override fun onPageScrollStateChanged(state: Int) {
                 Timber.d("state: $state")
             }
@@ -143,16 +144,21 @@ class CoolPetHeaderView @JvmOverloads constructor(
                         (mTagViews[0]?.layoutParams!! as LayoutParams).gravity = Gravity.TOP
                         (mTagViews[1]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
                         (mTagViews[2]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                        GlideApp.with(context).load(tabStatics[0]).centerInside().into(mTagViews[0]!!)
                     }
                     1 -> {
                         (mTagViews[0]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
                         (mTagViews[1]?.layoutParams!! as LayoutParams).gravity = Gravity.TOP
                         (mTagViews[2]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
+                        GlideApp.with(context).load(tabStatics[1]).centerInside().into(mTagViews[1]!!)
+
                     }
                     2-> {
                         (mTagViews[0]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
                         (mTagViews[1]?.layoutParams!! as LayoutParams).gravity = Gravity.BOTTOM
                         (mTagViews[2]?.layoutParams!! as LayoutParams).gravity = Gravity.TOP
+                        GlideApp.with(context).load(tabStatics[2]).centerInside().into(mTagViews[2]!!)
+
                     }
                 }
             }

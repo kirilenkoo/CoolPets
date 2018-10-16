@@ -14,7 +14,7 @@ import cn.kirilenkoo.www.coolpets.util.AppExecutors
 class PostAdapter(
         private val dataBindingComponent: DataBindingComponent,
         appExecutors: AppExecutors,
-        private val callback: ((Post) -> Unit)?
+        private val callback: ((PostWithContents) -> Unit)?
 ): DataBoundListAdapter<PostWithContents, PostItemBinding>(
         appExecutors = appExecutors,
         diffCallback = object : DiffUtil.ItemCallback<PostWithContents>() {
@@ -36,16 +36,16 @@ class PostAdapter(
                         false,
                         dataBindingComponent
                 )
-//        binding.root.setOnClickListener {
-//            binding.post?.let {
-//                callback?.invoke(it)
-//            }
-//        }
+        binding.root.setOnClickListener {
+            binding.post?.let {
+                callback?.invoke(it)
+            }
+        }
         return binding
     }
 
     override fun bind(binding: PostItemBinding, item: PostWithContents) {
-        binding.post = item.post
+        binding.post = item
     }
 
 }

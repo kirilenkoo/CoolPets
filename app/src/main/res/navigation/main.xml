@@ -14,4 +14,10 @@
         android:name="cn.kirilenkoo.www.coolpets.ui.fragments.MainFragment"
         android:label="MainFragment" >
     </fragment>
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="cn.kirilenkoo.www.coolpets.ui.fragments.PostDetailFragment"
+        android:label="PostDetailFragment">
+        <argument android:name="post" />
+    </fragment>
 </navigation>
