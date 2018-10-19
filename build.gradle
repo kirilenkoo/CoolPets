@@ -5,9 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven {
-            url "http://mvn.leancloud.cn/nexus/content/repositories/public"
-        }
+        maven { url "http://mvn.leancloud.cn/nexus/content/repositories/public" }
         mavenCentral()
     }
     dependencies {

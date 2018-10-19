@@ -2,10 +2,7 @@ package cn.kirilenkoo.www.coolpets.di
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import cn.kirilenkoo.www.coolpets.db.CoolPetDb
-import cn.kirilenkoo.www.coolpets.db.PostContentDao
-import cn.kirilenkoo.www.coolpets.db.PostDao
-import cn.kirilenkoo.www.coolpets.db.PostWithContentsDao
+import cn.kirilenkoo.www.coolpets.db.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -37,5 +34,11 @@ class AppModule {
     @Provides
     fun providePostContentDao(db: CoolPetDb): PostContentDao {
         return db.postContentDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providePostReplyDao(db: CoolPetDb): PostReplyDao{
+        return db.postReplyDao()
     }
 }

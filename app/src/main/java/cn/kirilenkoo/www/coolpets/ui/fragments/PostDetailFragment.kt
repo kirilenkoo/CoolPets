@@ -14,6 +14,7 @@ import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseFragment
 import cn.kirilenkoo.www.coolpets.binding.FragmentDataBindingComponent
 import cn.kirilenkoo.www.coolpets.databinding.PostDetailFragmentBinding
+import cn.kirilenkoo.www.coolpets.di.Injectable
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import cn.kirilenkoo.www.coolpets.util.AppExecutors
 import cn.kirilenkoo.www.coolpets.util.autoCleared
@@ -21,7 +22,7 @@ import cn.kirilenkoo.www.coolpets.viewmodel.PostDetailViewModel
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
 import javax.inject.Inject
 
-class PostDetailFragment : BaseFragment() {
+class PostDetailFragment : BaseFragment(), Injectable{
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
@@ -70,7 +71,7 @@ class PostDetailFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(PostDetailViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostDetailViewModel::class.java)
     }
 
 }

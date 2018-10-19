@@ -26,6 +26,8 @@ import cn.kirilenkoo.www.coolpets.util.AutoClearedValue
 import cn.kirilenkoo.www.coolpets.util.autoCleared
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
 import com.android.example.github.vo.Resource
+import androidx.navigation.fragment.findNavController
+
 import timber.log.Timber
 import javax.inject.Inject
 class PostListFragment : BaseFragment(), Injectable {
@@ -74,7 +76,8 @@ class PostListFragment : BaseFragment(), Injectable {
         val adapter = PostAdapter(dataBindingComponent, appExecutors){
             var bundle = Bundle()
             bundle.putParcelable("post", it)
-            Navigation.findNavController(recyclerView).navigate(R.id.postDetailFragment,bundle)
+            navController().navigate(R.id.postDetailFragment,bundle)
+//            Navigation.findNavController(recyclerView)
         }
         this.adapter = adapter
         recyclerView.adapter = adapter
@@ -96,6 +99,6 @@ class PostListFragment : BaseFragment(), Injectable {
         listener?.finished(this)
 
     }
-
+    fun navController() = findNavController()
 }
 
