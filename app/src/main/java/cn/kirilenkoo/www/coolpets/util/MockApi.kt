@@ -1,6 +1,6 @@
 package cn.kirilenkoo.www.coolpets.util
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import cn.kirilenkoo.www.coolpets.api.ApiResponse
 import cn.kirilenkoo.www.coolpets.model.Post
 import cn.kirilenkoo.www.coolpets.model.PostContent

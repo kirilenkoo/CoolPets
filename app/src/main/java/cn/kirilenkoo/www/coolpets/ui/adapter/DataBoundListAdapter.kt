@@ -1,9 +1,9 @@
 package cn.kirilenkoo.www.coolpets.ui.adapter
 
-import android.databinding.ViewDataBinding
-import android.support.v7.recyclerview.extensions.AsyncDifferConfig
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import android.view.ViewGroup
 import cn.kirilenkoo.www.coolpets.ui.viewholder.DataBoundViewHolder
 import cn.kirilenkoo.www.coolpets.util.AppExecutors

@@ -1,7 +1,7 @@
 package cn.kirilenkoo.www.coolpets.ui.activities
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseActivity
 import cn.kirilenkoo.www.coolpets.model.Pet

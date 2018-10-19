@@ -4,9 +4,9 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -31,7 +31,7 @@ class CoolPetHeaderView @JvmOverloads constructor(
     private var mTagViews = arrayOfNulls<ImageView>(3)
     private val mExpandSensitive  = 3
     private val mOnScrollListener = object: RecyclerView.OnScrollListener(){
-        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             if(isAnimating) return
             if(dy>mExpandSensitive){//scroll up

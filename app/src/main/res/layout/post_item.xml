@@ -9,7 +9,7 @@
             type="cn.kirilenkoo.www.coolpets.model.PostWithContents"
              />
     </data>
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_height_inlist"
         android:background="@color/md_white_1000"
@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation = "horizontal">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="@dimen/card_height_inlist"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -50,5 +50,5 @@
                     tools:text="Content Content \nContent\nContent\nContent\nContent\nContent\nContent\nContent"/>
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>

@@ -1,8 +1,8 @@
 package cn.kirilenkoo.www.coolpets.ui.adapter
 
-import android.databinding.DataBindingComponent
-import android.databinding.DataBindingUtil
-import android.support.v7.util.DiffUtil
+import androidx.databinding.DataBindingComponent
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import cn.kirilenkoo.www.coolpets.R
@@ -18,11 +18,9 @@ class PostAdapter(
 ): DataBoundListAdapter<PostWithContents, PostItemBinding>(
         appExecutors = appExecutors,
         diffCallback = object : DiffUtil.ItemCallback<PostWithContents>() {
-            override fun areItemsTheSame(oldItem: PostWithContents?, newItem: PostWithContents?): Boolean =
-                newItem?.post?.postId == oldItem?.post?.postId
-
-
-            override fun areContentsTheSame(oldItem: PostWithContents?, newItem: PostWithContents?): Boolean =
+            override fun areItemsTheSame(oldItem: PostWithContents, newItem: PostWithContents): Boolean =
+                    newItem?.post?.postId == oldItem?.post?.postId
+            override fun areContentsTheSame(oldItem: PostWithContents, newItem: PostWithContents): Boolean =
                     newItem?.post?.title == oldItem?.post?.title
 
         }

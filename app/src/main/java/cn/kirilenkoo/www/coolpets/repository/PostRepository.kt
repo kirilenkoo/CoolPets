@@ -1,7 +1,7 @@
 package cn.kirilenkoo.www.coolpets.repository
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import cn.kirilenkoo.www.coolpets.api.ApiResponse
 import cn.kirilenkoo.www.coolpets.db.PostContentDao
 import cn.kirilenkoo.www.coolpets.db.PostDao

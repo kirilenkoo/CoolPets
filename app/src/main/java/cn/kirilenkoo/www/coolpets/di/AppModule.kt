@@ -1,7 +1,7 @@
 package cn.kirilenkoo.www.coolpets.di
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import cn.kirilenkoo.www.coolpets.db.*
 import dagger.Module
 import dagger.Provides

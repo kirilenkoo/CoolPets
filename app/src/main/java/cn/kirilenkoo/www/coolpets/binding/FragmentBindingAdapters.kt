@@ -1,16 +1,16 @@
 package cn.kirilenkoo.www.coolpets.binding
 
 import android.content.Context
-import android.databinding.BindingAdapter
-import android.support.v4.app.Fragment
+import androidx.databinding.BindingAdapter
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
 import cn.kirilenkoo.www.coolpets.model.PostContent
 import com.bumptech.glide.Glide
 import javax.inject.Inject
-import android.databinding.ViewDataBinding
-import android.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.databinding.DataBindingUtil
 import android.view.ViewGroup
 import cn.kirilenkoo.www.coolpets.BR
 
