@@ -9,17 +9,24 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.lifecycle.Observer
 
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseFragment
 import cn.kirilenkoo.www.coolpets.binding.FragmentDataBindingComponent
 import cn.kirilenkoo.www.coolpets.databinding.PostDetailFragmentBinding
 import cn.kirilenkoo.www.coolpets.di.Injectable
+import cn.kirilenkoo.www.coolpets.model.PostReply
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import cn.kirilenkoo.www.coolpets.util.AppExecutors
 import cn.kirilenkoo.www.coolpets.util.autoCleared
 import cn.kirilenkoo.www.coolpets.viewmodel.PostDetailViewModel
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import timber.log.Timber
 import javax.inject.Inject
 
 class PostDetailFragment : BaseFragment(), Injectable{
@@ -66,7 +73,37 @@ class PostDetailFragment : BaseFragment(), Injectable{
         )
         binding = dataBinding
         binding.post = mPostDetail
+        binding.buttonLike.setOnClickListener {
+
+        }
+        binding.buttonReply.setOnClickListener {
+            showReplyDialog()
+        }
         return dataBinding.root
+    }
+    var dialog: MaterialDialog? = null
+    private fun showReplyDialog() {
+        if(dialog == null){
+            dialog = MaterialDialog(activity!!).customView(R.layout.dialog_reply_post)
+                    .positiveButton(text = "发布"){
+                        dialog -> dialog.getCustomView()?.
+                            findViewById<EditText>(R.id.editReply)?.
+                            text.toString().apply {
+                                submitReply(this)
+                        }
+                    }
+        }
+        dialog!!.show()
+    }
+
+    private fun submitReply(s: String) {
+        viewModel.submitReply(PostReply(1,mPostDetail.post.postId,2,s,"")).
+                observe(this, Observer {
+                    Timber.d(it.status.name)
+                    if(dialog!=null && dialog!!.isShowing) dialog?.dismiss()
+                    Timber.d(it.status.name)
+                })
+        Timber.d("$s submitted")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

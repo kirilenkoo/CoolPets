@@ -2,9 +2,7 @@ package cn.kirilenkoo.www.coolpets.util
 
 import androidx.lifecycle.MutableLiveData
 import cn.kirilenkoo.www.coolpets.api.ApiResponse
-import cn.kirilenkoo.www.coolpets.model.Post
-import cn.kirilenkoo.www.coolpets.model.PostContent
-import cn.kirilenkoo.www.coolpets.model.PostWithContents
+import cn.kirilenkoo.www.coolpets.model.*
 import timber.log.Timber
 import java.util.*
 
@@ -42,6 +40,17 @@ fun mockGetPostsWithContents(page : Int, appExecutors: AppExecutors): MutableLiv
         }
         appExecutors.mainThread().execute{
             liveData.value = ApiResponse.create(posts)
+        }
+    }.start()
+    return liveData
+}
+
+fun mockPostPostReply(postReply: PostReply, appExecutors: AppExecutors): MutableLiveData<ApiResponse<ApiPHMsg>>{
+    val liveData = MutableLiveData<ApiResponse<ApiPHMsg>>()
+    Thread {
+        Thread.sleep(2000)
+        appExecutors.mainThread().execute {
+            liveData.value = ApiResponse.create(ApiPHMsg())
         }
     }.start()
     return liveData

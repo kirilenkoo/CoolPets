@@ -11,7 +11,7 @@ import cn.kirilenkoo.www.coolpets.model.PostReply
             Post::class,
             PostContent::class,
             PostReply::class],
-        version = 2,
+        version = 3,
         exportSchema = true
 )
 abstract class CoolPetDb : RoomDatabase() {
