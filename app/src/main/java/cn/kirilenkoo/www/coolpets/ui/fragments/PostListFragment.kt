@@ -27,6 +27,7 @@ import cn.kirilenkoo.www.coolpets.util.autoCleared
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
 import com.android.example.github.vo.Resource
 import androidx.navigation.fragment.findNavController
+import com.android.example.github.vo.Status
 
 import timber.log.Timber
 import javax.inject.Inject
@@ -72,7 +73,7 @@ class PostListFragment : BaseFragment(), Injectable {
     private var adapter by autoCleared<PostAdapter>()
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val adapter = PostAdapter(dataBindingComponent, appExecutors){
             var bundle = Bundle()
             bundle.putParcelable("post", it)
@@ -94,6 +95,10 @@ class PostListFragment : BaseFragment(), Injectable {
 //                adapter.submitList()
 //                recyclerView.adapter.notifyDataSetChanged()
 //            }
+            Timber.d(it.status.name)
+            when(it.status){
+                Status.SUCCESS -> Timber.d("$it.data?.size")
+            }
             adapter.submitList(it?.data)
         })
         listener?.finished(this)

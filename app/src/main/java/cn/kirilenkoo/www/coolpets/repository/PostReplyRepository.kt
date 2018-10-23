@@ -8,6 +8,7 @@ import cn.kirilenkoo.www.coolpets.db.PostReplyDao
 import cn.kirilenkoo.www.coolpets.model.ApiPHMsg
 import cn.kirilenkoo.www.coolpets.model.PostReply
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
+import cn.kirilenkoo.www.coolpets.util.AbsentLiveData
 import cn.kirilenkoo.www.coolpets.util.AppExecutors
 import cn.kirilenkoo.www.coolpets.util.mockGetPostsWithContents
 import cn.kirilenkoo.www.coolpets.util.mockPostPostReply
@@ -25,7 +26,7 @@ class PostReplyRepository @Inject constructor(private val appExecutor : AppExecu
 
             override fun shouldFetch(data: PostReply?): Boolean = true
 
-            override fun loadFromDb(): LiveData<PostReply> = MutableLiveData<PostReply>()
+            override fun loadFromDb(): LiveData<PostReply> = AbsentLiveData.create()
 
             override fun createCall(): LiveData<ApiResponse<ApiPHMsg>> = mockPostPostReply(postReply,appExecutor)
 
