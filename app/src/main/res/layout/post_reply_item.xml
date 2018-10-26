@@ -5,9 +5,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="post"
-            type="cn.kirilenkoo.www.coolpets.model.PostWithContents"
-             />
+            name="postReply"
+            type="cn.kirilenkoo.www.coolpets.model.PostReply"
+            />
     </data>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:orientation = "horizontal">
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imgPostCover"
+                android:id="@+id/imgReplyCover"
                 android:layout_width="@dimen/card_height_inlist"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/textPostTitle"
+                    android:id="@+id/textReplyTitle"
                     style="@style/TitleTextViewTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -38,11 +38,11 @@
                     android:paddingTop="@dimen/gap_normal"
                     android:gravity="center"
                     android:lines="1"
-                    android:text="@{post.post.title}"
+                    android:text="@{postReply.replyId}"
                     android:freezesText="true"
                     tools:text="Name"/>
                 <TextView
-                    android:id="@+id/textPostContent"
+                    android:id="@+id/textReplyContent"
                     style="@style/ContentTextViewTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -50,7 +50,7 @@
                     android:paddingBottom="@dimen/gap_normal"
                     android:gravity="center"
                     android:ellipsize="end"
-                    android:text="@{post.post.title}"
+                    android:text="@{postReply.content}"
                     android:freezesText="true"
                     tools:text="Content Content \nContent\nContent\nContent\nContent\nContent\nContent\nContent"/>
             </LinearLayout>

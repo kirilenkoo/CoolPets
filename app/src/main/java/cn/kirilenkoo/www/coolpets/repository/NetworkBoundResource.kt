@@ -26,6 +26,8 @@ import cn.kirilenkoo.www.coolpets.api.ApiResponse
 import cn.kirilenkoo.www.coolpets.api.ApiSuccessResponse
 import cn.kirilenkoo.www.coolpets.util.AppExecutors
 import com.android.example.github.vo.Resource
+import timber.log.Timber
+
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
  *
@@ -41,6 +43,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
+        Timber.d("nbr init")
         result.value = Resource.loading(null)
         @Suppress("LeakingThis")
         val dbSource = loadFromDb()
@@ -67,12 +70,12 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         val apiResponse = createCall()
         // we re-attach dbSource as a new source, it will dispatch its latest value quickly
         result.addSource(dbSource) { newData ->
+            Timber.d("nbr loading")
             setValue(Resource.loading(newData))
         }
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)
             result.removeSource(dbSource)
-//            setValue(Resource.success(response?.data as ResultType))
             when (response) {
                 is ApiSuccessResponse -> {
                     appExecutors.diskIO().execute {

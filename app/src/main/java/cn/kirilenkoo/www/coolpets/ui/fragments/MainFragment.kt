@@ -43,6 +43,7 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        Timber.d("accr")
         binding.viewPager.adapter = MyCommonPagerAdapter(childFragmentManager!!)
         binding.viewPager.currentItem = 1
         binding.viewPager.offscreenPageLimit = 2
@@ -55,8 +56,9 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
         binding.bottomBar.getChildAt(1).setOnClickListener { Timber.d("bottom") }
     }
 
-    class MyCommonPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
+    class MyCommonPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
+            Timber.d("$position")
             val f = PostListFragment()
             return f
         }

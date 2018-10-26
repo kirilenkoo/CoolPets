@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import androidx.recyclerview.widget.RecyclerView
@@ -173,11 +175,18 @@ class CoolPetHeaderView @JvmOverloads constructor(
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
+//        Timber.d("$changed, $left, $right, $top, $bottom, $initTopY")
         if (initTopY == null){
-            initTopY = mTagViews[1]?.y
-            initLeftX = mTagViews[0]?.x
-            initMiddleX = mTagViews[1]?.x
-            initRightX = mTagViews[2]?.x
+//            initTopY = mTagViews[1]?.y
+//            initLeftX = mTagViews[0]?.x
+//            initMiddleX = mTagViews[1]?.x
+//            initRightX = mTagViews[2]?.x
+//            Timber.d("$initTopY,$initLeftX,$initMiddleX,$initRightX")
+            initTopY = paddingTop.toFloat()
+            initLeftX = paddingLeft.toFloat()
+            initMiddleX = ((right-left).toFloat()-initLWidth!!)/2
+            initRightX = right-left-paddingRight-initSWidth!!
+//            Timber.d("$initTopY,$initLeftX,$initMiddleX,$initRightX")
             initXhalfLength = initMiddleX!!+initLWidth!!/2-initLeftX!!-initSWidth!!/2
             maxHeight = layoutParams.height
             collapseAnimator = ValueAnimator.ofInt(maxHeight!!, minHeight)
@@ -205,6 +214,7 @@ class CoolPetHeaderView @JvmOverloads constructor(
 
             })
             collapseAnimator.duration = animDuration
+            Timber.d("$minHeight->$maxHeight")
             expandAnimator = ValueAnimator.ofInt(minHeight, maxHeight!!)
             expandAnimator.addUpdateListener {
                 val h= it.animatedValue as Int
@@ -317,4 +327,6 @@ class CoolPetHeaderView @JvmOverloads constructor(
         }
         Timber.d( " expanding : $dy / $height")
     }
+
+
 }

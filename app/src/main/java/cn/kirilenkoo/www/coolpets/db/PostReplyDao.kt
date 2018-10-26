@@ -15,5 +15,5 @@ interface PostReplyDao {
 
 
     @Query("SELECT * FROM postReply WHERE postId = :postId")
-    fun findPostReply(postId: Int): LiveData<List<PostReply>>
+    fun findPostReply(postId: String): LiveData<List<PostReply>>
 }

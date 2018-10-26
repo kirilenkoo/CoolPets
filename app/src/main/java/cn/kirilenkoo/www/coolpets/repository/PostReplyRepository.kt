@@ -26,10 +26,33 @@ class PostReplyRepository @Inject constructor(private val appExecutor : AppExecu
 
             override fun shouldFetch(data: PostReply?): Boolean = true
 
-            override fun loadFromDb(): LiveData<PostReply> = AbsentLiveData.create()
+            override fun loadFromDb(): LiveData<PostReply>{
+                appExecutor.diskIO().execute {
+                    postReplyDao.insert(postReply)
+                }
+
+                return AbsentLiveData.create()
+            }
 
             override fun createCall(): LiveData<ApiResponse<ApiPHMsg>> = mockPostPostReply(postReply,appExecutor)
 
         }.asLiveData()
     }
+
+    fun fetchPostReplys(postId: String):LiveData<Resource<List<PostReply>>>{
+        return object : NetworkBoundResource<List<PostReply>,List<PostReply>>(appExecutor){
+            override fun saveCallResult(item: List<PostReply>) {
+            }
+
+            override fun shouldFetch(data: List<PostReply>?): Boolean = false
+
+            override fun loadFromDb(): LiveData<List<PostReply>> {
+                return postReplyDao.findPostReply(postId)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<PostReply>>> = AbsentLiveData.create()
+
+        }.asLiveData()
+    }
+
 }
