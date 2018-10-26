@@ -1,4 +1,4 @@
 package cn.kirilenkoo.www.coolpets.model
 
-class ApiPHMsg {
+class ApiPHMsg(val remoteGeneratedId: String) {
 }

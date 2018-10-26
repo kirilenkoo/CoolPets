@@ -86,7 +86,7 @@ class PostDetailFragment : BaseFragment(), Injectable{
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostDetailViewModel::class.java)
         viewModel.postReplyData.observe(viewLifecycleOwner, Observer {
-            Timber.d(it.status.name)
+            Timber.d("submit:${it.status}->${it.data}")
         })
         viewModel.postReplyListData.observe(viewLifecycleOwner, Observer {
 //            when(it.status){

@@ -50,7 +50,7 @@ fun mockPostPostReply(postReply: PostReply, appExecutors: AppExecutors): Mutable
     Thread {
         Thread.sleep(2000)
         appExecutors.mainThread().execute {
-            liveData.value = ApiResponse.create(ApiPHMsg())
+            liveData.value = ApiResponse.create(ApiPHMsg(generatePostId()))
         }
     }.start()
     return liveData
