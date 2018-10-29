@@ -78,11 +78,10 @@ class PostDetailFragment : BaseFragment(), Injectable{
         )
         binding = dataBinding
         binding.post = mPostDetail
-        binding.buttonLike.setOnClickListener {
-
-        }
-        binding.buttonReply.setOnClickListener {
-            showReplyDialog()
+        binding.listener = View.OnClickListener {
+            when (it.id){
+                R.id.buttonReply -> showReplyDialog()
+            }
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostDetailViewModel::class.java)
         viewModel.postReplyData.observe(viewLifecycleOwner, Observer {

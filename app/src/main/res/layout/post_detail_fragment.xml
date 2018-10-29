@@ -7,6 +7,9 @@
             name="post"
             type="cn.kirilenkoo.www.coolpets.model.PostWithContents"
             />
+        <variable
+            name="listener"
+            type="android.view.View.OnClickListener"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -54,12 +57,14 @@
                             android:id="@+id/buttonLike"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="点赞"/>
+                            android:text="点赞"
+                            android:onClick="@{listener::onClick}"/>
                         <Button
                             android:id="@+id/buttonReply"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="评论"/>
+                            android:text="评论"
+                            android:onClick="@{listener::onClick}"/>
                     </LinearLayout>
                 </RelativeLayout>
 

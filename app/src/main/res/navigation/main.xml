@@ -20,4 +20,9 @@
         android:label="PostDetailFragment">
         <argument android:name="post" />
     </fragment>
+    <fragment
+        android:id="@+id/postEdeitFragment"
+        android:name="cn.kirilenkoo.www.coolpets.ui.fragments.PostEditFragment"
+        android:label="PostEditFragment">
+    </fragment>
 </navigation>

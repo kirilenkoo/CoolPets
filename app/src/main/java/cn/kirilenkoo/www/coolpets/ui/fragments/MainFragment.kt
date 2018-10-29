@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.databinding.FragmentMainBinding
@@ -38,6 +39,11 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
                 false
         )
         binding = dataBinding
+        binding.panelListener = View.OnClickListener {
+            when (binding.bottomBar.indexOfChild(it)){
+                1 -> findNavController().navigate(R.id.postEdeitFragment)
+            }
+        }
         return dataBinding.root
     }
 

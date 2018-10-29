@@ -7,6 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <!--<item name="android:imageButtonStyle">@style/PanelImageButtonStyle</item>-->
+        <item name="imageButtonStyle">@style/PanelImageButtonStyle</item>
+    </style>
+
+    <style name="PanelImageButtonStyle" parent="Base.Widget.AppCompat.ImageButton">
+        <item name="android:background">@color/md_white_1000</item>
     </style>
 
     <style name="TitleTextViewTheme" parent="android:Theme">
