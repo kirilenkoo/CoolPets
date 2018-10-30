@@ -19,6 +19,7 @@ package cn.kirilenkoo.www.coolpets.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cn.kirilenkoo.www.coolpets.viewmodel.PostDetailViewModel
+import cn.kirilenkoo.www.coolpets.viewmodel.PostEditViewModel
 import cn.kirilenkoo.www.coolpets.viewmodel.PostListViewModel
 import dagger.Binds
 import dagger.Module
@@ -34,7 +35,11 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(PostDetailViewModel::class)
-    abstract fun bindPostDetailViewModel(postListViewModel: PostDetailViewModel): ViewModel
+    abstract fun bindPostDetailViewModel(postDetailViewModel: PostDetailViewModel): ViewModel
+    @Binds
+    @IntoMap
+    @ViewModelKey(PostEditViewModel::class)
+    abstract fun bindPostEditViewModel(postEditViewModel: PostEditViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: CoolPetViewModelFactory): ViewModelProvider.Factory
