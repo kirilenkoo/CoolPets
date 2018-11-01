@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -24,8 +25,11 @@ import cn.kirilenkoo.www.coolpets.binding.FragmentDataBindingComponent
 import cn.kirilenkoo.www.coolpets.databinding.PostDetailFragmentBinding
 import cn.kirilenkoo.www.coolpets.databinding.PostEditFragmentBinding
 import cn.kirilenkoo.www.coolpets.di.Injectable
+import cn.kirilenkoo.www.coolpets.thirdparty.GlideApp
+import cn.kirilenkoo.www.coolpets.ui.view.StateImageView
 import cn.kirilenkoo.www.coolpets.util.autoCleared
 import cn.kirilenkoo.www.coolpets.util.getPath
+import cn.kirilenkoo.www.coolpets.viewmodel.EditPost
 import cn.kirilenkoo.www.coolpets.viewmodel.PostDetailViewModel
 import cn.kirilenkoo.www.coolpets.viewmodel.PostEditViewModel
 import timber.log.Timber
@@ -38,9 +42,11 @@ class PostEditFragment : BaseFragment(), Injectable {
 
     var binding by autoCleared<PostEditFragmentBinding>()
     var dataBindingComponent = FragmentDataBindingComponent(this)
-    var coverPath:String? = null
+//    var coverPath:String? = null
+//    val contents:ArrayList<String> = ArrayList()
 
-    val PICK_IMAGE_REQUEST = 1
+    private val PICK_IMAGE_COVER_REQUEST = 1
+    private val PICK_IMAGE_CONTENT_REQUEST = 2
     companion object {
         fun newInstance() = PostEditFragment()
     }
@@ -60,34 +66,44 @@ class PostEditFragment : BaseFragment(), Injectable {
                 0 -> {
                     Timber.d("0")
                 }
-                1 -> Timber.d("1")
+                1 -> addImageContent()
                 2 -> Timber.d("2")
                 3 -> Timber.d("3")
 
             }
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostEditViewModel::class.java)
-        viewModel.tmpPost.observe(viewLifecycleOwner, Observer {
-            //if has cover url, set cover url
-            //if has savedinstance, set imageview state:
-             viewModel.bindImageView(binding.imgPostCover,savedInstanceState?.getString("coverPath"),viewLifecycleOwner)
-//            binding.editPostTitle.setText(it.post.title)
-            //parse contents to container
-        })
+
+        if(savedInstanceState!=null){
+            val tmpPost:EditPost = savedInstanceState.getParcelable("tmpPost")
+            viewModel.setTmpPost(tmpPost)
+            GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
+            val imgList:ArrayList<ImageView> = ArrayList()
+            for(c in tmpPost.contents){
+                val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+                val contentImage = StateImageView(activity as Context)
+                binding.containerEditContents.addView(contentImage,llp)
+                GlideApp.with(this).load(c).fitCenter().into(contentImage)
+                imgList.add(contentImage)
+            }
+            viewModel.rebindImageViews(binding.imgPostCover,imgList,viewLifecycleOwner)
+        }
         binding.imgPostCover.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-//            intent.type = "image/*"
-//            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(intent,PICK_IMAGE_REQUEST)
-
+            startActivityForResult(intent,PICK_IMAGE_COVER_REQUEST)
         }
         return dataBinding.root
+    }
+
+    private fun addImageContent() {
+        val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(intent,PICK_IMAGE_CONTENT_REQUEST)
     }
 
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("coverPath", coverPath)
+        outState.putParcelable("tmpPost", viewModel.getTmpPost())
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -99,14 +115,24 @@ class PostEditFragment : BaseFragment(), Injectable {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK){
             when (requestCode){
-                PICK_IMAGE_REQUEST -> {
+                PICK_IMAGE_COVER_REQUEST -> {
                     val imageUri:Uri = data?.data!!
                     Timber.d(getPath(activity as Context,imageUri))
                     binding.imgPostCover.setImageURI(imageUri)
-                    coverPath = getPath(activity as Context, imageUri)
-                    viewModel.bindImageView(binding.imgPostCover,coverPath,viewLifecycleOwner)
-                    viewModel.uploadImg(coverPath)
+                    val coverPath = getPath(activity as Context, imageUri)
+                    GlideApp.with(this).load(coverPath).centerCrop().into(binding.imgPostCover)
+                    viewModel.addPostCover(binding.imgPostCover,coverPath,viewLifecycleOwner)
 
+                }
+                PICK_IMAGE_CONTENT_REQUEST -> {
+                    val imageUri:Uri = data?.data!!
+                    Timber.d(getPath(activity as Context,imageUri))
+                    val contentPath = getPath(activity as Context, imageUri)
+                    val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+                    val contentImage = StateImageView(activity as Context)
+                    binding.containerEditContents.addView(contentImage,llp)
+                    GlideApp.with(this).load(contentPath).fitCenter().into(contentImage)
+                    viewModel.addImgContent(contentImage,contentPath,viewLifecycleOwner)
                 }
             }
         }

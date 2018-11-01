@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <ImageView
+                <cn.kirilenkoo.www.coolpets.ui.view.StateImageView
                     android:id="@+id/imgPostCover"
                     android:layout_width="@dimen/img_cover_width_in_edit"
                     android:layout_height="@dimen/img_cover_width_in_edit" />

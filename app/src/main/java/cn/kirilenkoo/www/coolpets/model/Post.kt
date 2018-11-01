@@ -10,16 +10,20 @@ import android.os.Parcelable
 
 @Entity(primaryKeys = ["postId"])
 data class Post(val postId: String, val title: String) : Parcelable {
+    var coverUrl: String? = null
     constructor(source: Parcel) : this(
             source.readString(),
             source.readString()
-    )
+    ){
+        coverUrl = source.readString()
+    }
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeString(postId)
         writeString(title)
+        writeString(coverUrl)
     }
 
     companion object {
