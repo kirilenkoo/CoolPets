@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="content"
@@ -10,10 +10,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:imageUrl="@{content.url}"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{content.text}"/>
+            android:text="@{content.text}"
+            android:textSize="@{(content.url == null||content.url.length()==0)? @dimen/content_text_size_in_detail : @dimen/img_desc_text_size}"/>
     </FrameLayout>
 
 </layout>

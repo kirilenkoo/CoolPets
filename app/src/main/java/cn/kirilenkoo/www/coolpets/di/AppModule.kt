@@ -41,4 +41,10 @@ class AppModule {
     fun providePostReplyDao(db: CoolPetDb): PostReplyDao{
         return db.postReplyDao()
     }
+
+    @Singleton
+    @Provides
+    fun provideImgDao(db: CoolPetDb): ImgDao{
+        return db.imgDao()
+    }
 }

@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import cn.kirilenkoo.www.coolpets.R
 import cn.kirilenkoo.www.coolpets.base.BaseApplication
@@ -67,31 +68,16 @@ class PostEditFragment : BaseFragment(), Injectable {
                     Timber.d("0")
                 }
                 1 -> addImageContent()
-                2 -> Timber.d("2")
+                2 -> {
+                    var bundle = Bundle()
+                    bundle.putParcelable("editPost", viewModel.getTmpPost())
+                    findNavController().navigate(R.id.postPreviewFragment,bundle)
+                }
                 3 -> Timber.d("3")
 
             }
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostEditViewModel::class.java)
-
-        if(savedInstanceState!=null){
-            val tmpPost:EditPost = savedInstanceState.getParcelable("tmpPost")
-            viewModel.setTmpPost(tmpPost)
-            GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
-            val imgList:ArrayList<ImageView> = ArrayList()
-            for(c in tmpPost.contents){
-                val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-                val contentImage = StateImageView(activity as Context)
-                binding.containerEditContents.addView(contentImage,llp)
-                GlideApp.with(this).load(c).fitCenter().into(contentImage)
-                imgList.add(contentImage)
-            }
-            viewModel.rebindImageViews(binding.imgPostCover,imgList,viewLifecycleOwner)
-        }
-        binding.imgPostCover.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(intent,PICK_IMAGE_COVER_REQUEST)
-        }
         return dataBinding.root
     }
 
@@ -108,7 +94,24 @@ class PostEditFragment : BaseFragment(), Injectable {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        if(savedInstanceState!=null){
+            val tmpPost:EditPost = savedInstanceState.getParcelable("tmpPost")
+            viewModel.setTmpPost(tmpPost)
+            GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
+            val imgList:ArrayList<ImageView> = ArrayList()
+            for(c in tmpPost.contents){
+                val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+                val contentImage = StateImageView(activity as Context)
+                binding.containerEditContents.addView(contentImage,llp)
+                GlideApp.with(this).load(c.url).fitCenter().into(contentImage)
+                imgList.add(contentImage)
+            }
+            viewModel.rebindImageViews(binding.imgPostCover,imgList,viewLifecycleOwner)
+        }
+        binding.imgPostCover.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(intent,PICK_IMAGE_COVER_REQUEST)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

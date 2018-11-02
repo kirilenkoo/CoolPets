@@ -13,12 +13,13 @@ import androidx.databinding.ViewDataBinding
 import androidx.databinding.DataBindingUtil
 import android.view.ViewGroup
 import cn.kirilenkoo.www.coolpets.BR
+import cn.kirilenkoo.www.coolpets.thirdparty.GlideApp
 
 
 class FragmentBindingAdapters @Inject constructor(val fragment: Fragment) {
     @BindingAdapter("imageUrl")
     fun bindImage(imageView: ImageView, url: String?) {
-        Glide.with(fragment).load(url).into(imageView)
+        GlideApp.with(fragment).load(url).centerInside().into(imageView)
     }
     @BindingAdapter(value = ["contents", "layout"], requireAll = false)
     fun fullContents(container: LinearLayout, contents: List<PostContent>, layout: Int ){
@@ -34,7 +35,7 @@ class FragmentBindingAdapters @Inject constructor(val fragment: Fragment) {
     private fun bindLayout(inflater: LayoutInflater,
                            parent: ViewGroup, layoutId: Int, entry: Any): ViewDataBinding {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater,
-                layoutId, parent, false)
+                layoutId, parent, false, FragmentDataBindingComponent(fragment))
         if (!binding.setVariable(BR.content, entry)) {
         }
         return binding

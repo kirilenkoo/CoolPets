@@ -8,4 +8,6 @@
     <dimen name="gap_normal">8dp</dimen>
     <dimen name="padding_half">8dp</dimen>
     <dimen name="ava_width_in_detail">50dp</dimen>
+    <dimen name="content_text_size_in_detail">16sp</dimen>
+    <dimen name="img_desc_text_size">12sp</dimen>
 </resources>

@@ -5,8 +5,9 @@ import android.os.Parcel
 import android.os.Parcelable
 
 @Entity(primaryKeys = ["contentId"])
-class PostContent(val contentId: String, val postId: String, val text: String?) : Parcelable {
+class PostContent(val contentId: String, val postId: String, var text: String?, var url:String?) : Parcelable {
     constructor(source: Parcel) : this(
+            source.readString(),
             source.readString(),
             source.readString(),
             source.readString()
@@ -18,6 +19,7 @@ class PostContent(val contentId: String, val postId: String, val text: String?) 
         writeString(contentId)
         writeString(postId)
         writeString(text)
+        writeString(url)
     }
 
     companion object {

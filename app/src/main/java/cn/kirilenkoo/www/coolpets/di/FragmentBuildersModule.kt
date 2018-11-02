@@ -1,9 +1,6 @@
 package cn.kirilenkoo.www.coolpets.di
 
-import cn.kirilenkoo.www.coolpets.ui.fragments.MainFragment
-import cn.kirilenkoo.www.coolpets.ui.fragments.PostDetailFragment
-import cn.kirilenkoo.www.coolpets.ui.fragments.PostEditFragment
-import cn.kirilenkoo.www.coolpets.ui.fragments.PostListFragment
+import cn.kirilenkoo.www.coolpets.ui.fragments.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -17,4 +14,6 @@ abstract class FragmentBuildersModule {
     abstract fun contributeMainFragment(): MainFragment
     @ContributesAndroidInjector
     abstract fun contributePostEditFragment(): PostEditFragment
+    @ContributesAndroidInjector
+    abstract fun contributePostPreviewFragment(): PostPreviewFragment
 }

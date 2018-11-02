@@ -33,7 +33,7 @@ fun mockGetPostsWithContents(page : Int, appExecutors: AppExecutors): MutableLiv
             pwc.post = Post(generatePostId(),"$i")
             val postContents = arrayListOf<PostContent>()
             for (j in 0..5){
-                postContents.add(PostContent(postId = pwc.post.postId,contentId = generatePostId(),text = "$j"))
+                postContents.add(PostContent(postId = pwc.post.postId,contentId = generatePostId(),text = "$j",url = ""))
             }
             pwc.contentList = postContents
             posts.add(pwc)
