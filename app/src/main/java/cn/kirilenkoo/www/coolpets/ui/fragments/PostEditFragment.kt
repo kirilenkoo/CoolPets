@@ -71,7 +71,7 @@ class PostEditFragment : BaseFragment(), Injectable {
                 2 -> {
                     var bundle = Bundle()
                     bundle.putParcelable("editPost", viewModel.getTmpPost())
-                    findNavController().navigate(R.id.postPreviewFragment,bundle)
+                    findNavController().navigate(R.id.action_postEdeitFragment_to_postPreviewFragment,bundle)
                 }
                 3 -> Timber.d("3")
 
@@ -107,6 +107,11 @@ class PostEditFragment : BaseFragment(), Injectable {
                 imgList.add(contentImage)
             }
             viewModel.rebindImageViews(binding.imgPostCover,imgList,viewLifecycleOwner)
+        }else{
+            //back from preview
+            val tmpPost:EditPost = viewModel.getTmpPost()
+            GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
+            //TODO: reload tmp post in viewmodel
         }
         binding.imgPostCover.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)

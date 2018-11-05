@@ -8,6 +8,12 @@
         android:id="@+id/postListFragment"
         android:name="cn.kirilenkoo.www.coolpets.ui.fragments.PostListFragment"
         android:label="PostListFragment" >
+        <action
+            android:id="@+id/action_postListFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+        <action
+            android:id="@+id/action_postListFragment_to_postEdeitFragment"
+            app:destination="@id/postEdeitFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -24,6 +30,9 @@
         android:id="@+id/postEdeitFragment"
         android:name="cn.kirilenkoo.www.coolpets.ui.fragments.PostEditFragment"
         android:label="PostEditFragment">
+        <action
+            android:id="@+id/action_postEdeitFragment_to_postPreviewFragment"
+            app:destination="@id/postPreviewFragment" />
     </fragment>
     <fragment
         android:id="@+id/postPreviewFragment"

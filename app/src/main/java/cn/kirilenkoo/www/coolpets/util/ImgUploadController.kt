@@ -33,8 +33,11 @@ class ImgUploadController @Inject constructor() {
         if (path == null) return
         if (checkIfPathInMap(path)) {
             //has uploaded
+            //TODO: need deal with view recreated
+            //TODO: need make weakereference as list<WeakReference<View>>
             rebindViewState(path, view)
         } else {
+            //TODO: need check db
             val liveData = MutableLiveData<ImgUploadState>()
             imgMap[path] = liveData
             liveData.value = ImgUploadState().apply {
