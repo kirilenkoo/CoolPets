@@ -111,7 +111,15 @@ class PostEditFragment : BaseFragment(), Injectable {
             //back from preview
             val tmpPost:EditPost = viewModel.getTmpPost()
             GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
-            //TODO: reload tmp post in viewmodel
+            val imgList:ArrayList<ImageView> = ArrayList()
+            for(c in tmpPost.contents){
+                val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+                val contentImage = StateImageView(activity as Context)
+                binding.containerEditContents.addView(contentImage,llp)
+                GlideApp.with(this).load(c.url).fitCenter().into(contentImage)
+                imgList.add(contentImage)
+            }
+            viewModel.rebindImageViews(binding.imgPostCover,imgList,viewLifecycleOwner)
         }
         binding.imgPostCover.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)

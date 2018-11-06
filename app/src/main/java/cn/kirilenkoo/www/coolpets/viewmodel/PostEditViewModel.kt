@@ -26,18 +26,18 @@ class PostEditViewModel @Inject constructor(val postRepository: PostRepository, 
         if(localPath == null) return
         tmpPost.coverPath = localPath
         bindImageView(imageView,localPath,viewLifecycleOwner)
-        if(!imgUploadController.hasPathUpdated(localPath)) imgUploadController.uploadImg(localPath)
+//        if(!imgUploadController.hasPathUpdated(localPath)) imgUploadController.uploadImg(localPath)
     }
 
     fun rebindImageViews(coverImageView: ImageView, contentImageViews: ArrayList<ImageView>, viewLifecycleOwner: LifecycleOwner){
         if(tmpPost.coverPath!=null){
             bindImageView(coverImageView, tmpPost.coverPath, viewLifecycleOwner)
-            if(!imgUploadController.hasPathUpdated(tmpPost.coverPath!!)) imgUploadController.uploadImg(tmpPost.coverPath!!)
+//            if(!imgUploadController.hasPathUpdated(tmpPost.coverPath!!)) imgUploadController.uploadImg(tmpPost.coverPath!!)
         }
         for ( i in 0 until tmpPost.contents.size){
             if(tmpPost.contents[i] != null){
                 bindImageView(contentImageViews[i], tmpPost.contents[i].url, viewLifecycleOwner)
-                if(!imgUploadController.hasPathUpdated(tmpPost.contents[i].url)) imgUploadController.uploadImg(tmpPost.contents[i].url)
+//                if(!imgUploadController.hasPathUpdated(tmpPost.contents[i].url)) imgUploadController.uploadImg(tmpPost.contents[i].url)
             }
         }
     }
@@ -46,7 +46,7 @@ class PostEditViewModel @Inject constructor(val postRepository: PostRepository, 
         if(contentPath == null) return
         tmpPost.contents.add(PostContent("","","",contentPath))
         bindImageView(contentImage,contentPath,viewLifecycleOwner)
-        if(!imgUploadController.hasPathUpdated(contentPath)) imgUploadController.uploadImg(contentPath)
+//        if(!imgUploadController.hasPathUpdated(contentPath)) imgUploadController.uploadImg(contentPath)
     }
     fun getTmpPost():EditPost{
         return tmpPost
