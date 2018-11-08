@@ -7,6 +7,7 @@ import android.media.Image
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Environment
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,12 +29,14 @@ import cn.kirilenkoo.www.coolpets.databinding.PostEditFragmentBinding
 import cn.kirilenkoo.www.coolpets.di.Injectable
 import cn.kirilenkoo.www.coolpets.thirdparty.GlideApp
 import cn.kirilenkoo.www.coolpets.ui.view.StateImageView
+import cn.kirilenkoo.www.coolpets.util.FindMedian
 import cn.kirilenkoo.www.coolpets.util.autoCleared
 import cn.kirilenkoo.www.coolpets.util.getPath
 import cn.kirilenkoo.www.coolpets.viewmodel.EditPost
 import cn.kirilenkoo.www.coolpets.viewmodel.PostDetailViewModel
 import cn.kirilenkoo.www.coolpets.viewmodel.PostEditViewModel
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 class PostEditFragment : BaseFragment(), Injectable {
@@ -73,7 +76,29 @@ class PostEditFragment : BaseFragment(), Injectable {
                     bundle.putParcelable("editPost", viewModel.getTmpPost())
                     findNavController().navigate(R.id.action_postEdeitFragment_to_postPreviewFragment,bundle)
                 }
-                3 -> Timber.d("3")
+                3 -> {
+//                    val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+//                    var data: File? = null
+//                    for (file in dir.listFiles()){
+//                        if(file.name.contains("103.txt")){
+//                            Timber.d(file.name)
+//                            data = file
+//                        }
+//
+//                    }
+//                    val datas = data?.let {
+//                        it.readLines().map {
+//                            it.toInt()
+//                        }
+//                    }
+//                    val ints = datas?.toIntArray()
+//                    Timber.d("3")
+//                    val start = System.currentTimeMillis()
+//                    val med = FindMedian().findMedian(ints)
+//                    Timber.d("${System.currentTimeMillis()-start}" +
+//                            "->$med")
+                    FindMedian().findMed()
+                }
 
             }
         }
@@ -154,4 +179,6 @@ class PostEditFragment : BaseFragment(), Injectable {
         }
 
     }
+
+
 }
