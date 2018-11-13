@@ -8,10 +8,13 @@ import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -37,6 +40,8 @@ import cn.kirilenkoo.www.coolpets.viewmodel.PostDetailViewModel
 import cn.kirilenkoo.www.coolpets.viewmodel.PostEditViewModel
 import timber.log.Timber
 import java.io.File
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 import javax.inject.Inject
 
 class PostEditFragment : BaseFragment(), Injectable {
@@ -67,9 +72,7 @@ class PostEditFragment : BaseFragment(), Injectable {
         binding = dataBinding
         binding.panelListener = View.OnClickListener {
             when (binding.containerEditPanel.indexOfChild(it)){
-                0 -> {
-                    Timber.d("0")
-                }
+                0 -> addTextContent()
                 1 -> addImageContent()
                 2 -> {
                     var bundle = Bundle()
@@ -77,27 +80,7 @@ class PostEditFragment : BaseFragment(), Injectable {
                     findNavController().navigate(R.id.action_postEdeitFragment_to_postPreviewFragment,bundle)
                 }
                 3 -> {
-//                    val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-//                    var data: File? = null
-//                    for (file in dir.listFiles()){
-//                        if(file.name.contains("103.txt")){
-//                            Timber.d(file.name)
-//                            data = file
-//                        }
-//
-//                    }
-//                    val datas = data?.let {
-//                        it.readLines().map {
-//                            it.toInt()
-//                        }
-//                    }
-//                    val ints = datas?.toIntArray()
-//                    Timber.d("3")
-//                    val start = System.currentTimeMillis()
-//                    val med = FindMedian().findMedian(ints)
-//                    Timber.d("${System.currentTimeMillis()-start}" +
-//                            "->$med")
-                    FindMedian().findMed()
+
                 }
 
             }
@@ -105,6 +88,27 @@ class PostEditFragment : BaseFragment(), Injectable {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostEditViewModel::class.java)
         return dataBinding.root
     }
+
+    private fun addTextContent() {
+        val edit = EditText(activity as Context)
+        edit.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                val s = p0.toString()
+                viewModel.textChanged(binding.containerEditContents.indexOfChild(edit),s)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+        })
+        val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        binding.containerEditContents.addView(edit,llp)
+        viewModel.addTextContent(null)
+    }
+
 
     private fun addImageContent() {
         val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -119,33 +123,32 @@ class PostEditFragment : BaseFragment(), Injectable {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        var tmpPost:EditPost
         if(savedInstanceState!=null){
-            val tmpPost:EditPost = savedInstanceState.getParcelable("tmpPost")
+            tmpPost = savedInstanceState.getParcelable("tmpPost")
             viewModel.setTmpPost(tmpPost)
-            GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
-            val imgList:ArrayList<ImageView> = ArrayList()
-            for(c in tmpPost.contents){
-                val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-                val contentImage = StateImageView(activity as Context)
-                binding.containerEditContents.addView(contentImage,llp)
-                GlideApp.with(this).load(c.url).fitCenter().into(contentImage)
-                imgList.add(contentImage)
-            }
-            viewModel.rebindImageViews(binding.imgPostCover,imgList,viewLifecycleOwner)
+
         }else{
             //back from preview
-            val tmpPost:EditPost = viewModel.getTmpPost()
-            GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
-            val imgList:ArrayList<ImageView> = ArrayList()
-            for(c in tmpPost.contents){
-                val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+            tmpPost = viewModel.getTmpPost()
+        }
+        GlideApp.with(this).load(tmpPost.coverPath).centerCrop().into(binding.imgPostCover)
+        val viewList:ArrayList<View> = ArrayList()
+        for(c in tmpPost.contents){
+            val llp:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+            if(c.url?.isEmpty() != true){
                 val contentImage = StateImageView(activity as Context)
                 binding.containerEditContents.addView(contentImage,llp)
                 GlideApp.with(this).load(c.url).fitCenter().into(contentImage)
-                imgList.add(contentImage)
+                viewList.add(contentImage)
+            }else{
+                val contentText = EditText(activity as Context)
+                binding.containerEditContents.addView(contentText,llp)
+                contentText.setText(c.text)
+                viewList.add(contentText)
             }
-            viewModel.rebindImageViews(binding.imgPostCover,imgList,viewLifecycleOwner)
         }
+        viewModel.rebindImageViews(binding.imgPostCover,viewList,viewLifecycleOwner)
         binding.imgPostCover.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(intent,PICK_IMAGE_COVER_REQUEST)

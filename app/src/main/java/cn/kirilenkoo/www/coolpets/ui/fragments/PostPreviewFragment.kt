@@ -20,6 +20,7 @@ import cn.kirilenkoo.www.coolpets.model.PostContent
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import cn.kirilenkoo.www.coolpets.util.ImgUploadController
 import cn.kirilenkoo.www.coolpets.util.autoCleared
+import cn.kirilenkoo.www.coolpets.util.isStringEmpty
 import cn.kirilenkoo.www.coolpets.viewmodel.EditPost
 import javax.inject.Inject
 
@@ -57,7 +58,9 @@ class PostPreviewFragment : BaseFragment() ,Injectable{
             contentList = ArrayList<PostContent>().apply {
                 editPost?.apply {
                     for(postContent in contents){
-                        if(postContent.url != null){
+                        if(isStringEmpty(postContent.url)){
+                            add(postContent.copy())
+                        }else{
                             add(postContent.copy(url = imgUploadController.tradeUrl(postContent.url)))
                         }
                     }

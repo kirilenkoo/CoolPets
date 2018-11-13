@@ -2,6 +2,7 @@ package cn.kirilenkoo.www.coolpets.viewmodel
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -26,18 +27,18 @@ class PostEditViewModel @Inject constructor(val postRepository: PostRepository, 
         if(localPath == null) return
         tmpPost.coverPath = localPath
         bindImageView(imageView,localPath,viewLifecycleOwner)
-//        if(!imgUploadController.hasPathUpdated(localPath)) imgUploadController.uploadImg(localPath)
     }
 
-    fun rebindImageViews(coverImageView: ImageView, contentImageViews: ArrayList<ImageView>, viewLifecycleOwner: LifecycleOwner){
+    fun rebindImageViews(coverImageView: ImageView, contentViews: ArrayList<View>, viewLifecycleOwner: LifecycleOwner){
         if(tmpPost.coverPath!=null){
             bindImageView(coverImageView, tmpPost.coverPath, viewLifecycleOwner)
-//            if(!imgUploadController.hasPathUpdated(tmpPost.coverPath!!)) imgUploadController.uploadImg(tmpPost.coverPath!!)
         }
         for ( i in 0 until tmpPost.contents.size){
-            if(tmpPost.contents[i] != null){
-                bindImageView(contentImageViews[i], tmpPost.contents[i].url, viewLifecycleOwner)
-//                if(!imgUploadController.hasPathUpdated(tmpPost.contents[i].url)) imgUploadController.uploadImg(tmpPost.contents[i].url)
+            if(tmpPost.contents[i].url != null && !tmpPost.contents[i].url.equals("")){
+                if(contentViews[i] is ImageView){
+                    bindImageView(contentViews[i] as ImageView, tmpPost.contents[i].url, viewLifecycleOwner)
+                }
+
             }
         }
     }
@@ -46,13 +47,19 @@ class PostEditViewModel @Inject constructor(val postRepository: PostRepository, 
         if(contentPath == null) return
         tmpPost.contents.add(PostContent("","","",contentPath))
         bindImageView(contentImage,contentPath,viewLifecycleOwner)
-//        if(!imgUploadController.hasPathUpdated(contentPath)) imgUploadController.uploadImg(contentPath)
+    }
+    fun addTextContent(contentText: String?){
+        tmpPost.contents.add(PostContent("","",contentText?:"",""))
     }
     fun getTmpPost():EditPost{
         return tmpPost
     }
     fun setTmpPost(editPost: EditPost){
         tmpPost = editPost
+    }
+
+    fun textChanged(indexOfChild: Int, s: String) {
+        tmpPost.contents[indexOfChild].text = s
     }
 }
 

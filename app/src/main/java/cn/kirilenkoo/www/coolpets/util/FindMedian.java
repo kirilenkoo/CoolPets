@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import timber.log.Timber;
-
+@Deprecated
 public class FindMedian {
     private static final int THRESHOLD = 10000; // assume this is an OK threshold for ram to copy all the numbers
     private int INITIAL_RANGE = 100000; // which will result in about 21xxx buckets

@@ -161,10 +161,6 @@ class ImgUploadController @Inject constructor() {
 
     }
 
-    fun hasPathUpdated(localPath: String?): Boolean {
-        if (localPath == null) return false
-        return imgMap.containsKey(localPath)
-    }
 
     fun tradeUrl(path: String?): String? {
         return if (path == null) null
