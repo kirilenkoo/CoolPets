@@ -56,7 +56,7 @@ class PostEditViewModel @Inject constructor(val postRepository: PostRepository, 
     }
 }
 
-class EditPost(var postTitle: String? = null, var coverPath: String? = null, val contents: ArrayList<PostContent> = ArrayList()) : Parcelable {
+data class EditPost(var postTitle: String? = null, var coverPath: String? = null, val contents: ArrayList<PostContent> = ArrayList()) : Parcelable {
     constructor(source: Parcel) : this(
             source.readString(),
             source.readString(),

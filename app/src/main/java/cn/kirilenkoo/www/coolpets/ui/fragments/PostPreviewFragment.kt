@@ -16,6 +16,7 @@ import cn.kirilenkoo.www.coolpets.databinding.PostDetailFragmentBinding
 import cn.kirilenkoo.www.coolpets.databinding.PostEditFragmentBinding
 import cn.kirilenkoo.www.coolpets.di.Injectable
 import cn.kirilenkoo.www.coolpets.model.Post
+import cn.kirilenkoo.www.coolpets.model.PostContent
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import cn.kirilenkoo.www.coolpets.util.ImgUploadController
 import cn.kirilenkoo.www.coolpets.util.autoCleared
@@ -30,7 +31,8 @@ class PostPreviewFragment : BaseFragment() ,Injectable{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            mEditPost = it.getParcelable("editPost")
+            val post:EditPost = it.getParcelable("editPost")
+            mEditPost = post.copy()
         }
     }
     var dataBindingComponent = FragmentDataBindingComponent(this)
@@ -52,14 +54,17 @@ class PostPreviewFragment : BaseFragment() ,Injectable{
 
     private fun generateRealPost(editPost: EditPost?) =  PostWithContents().apply {
             post = Post("",editPost?.postTitle?:"")
-            editPost?.apply {
-                for(postContent in contents){
-                    if(postContent.url != null){
-                        postContent.url = imgUploadController.tradeUrl(postContent.url)
+            contentList = ArrayList<PostContent>().apply {
+                editPost?.apply {
+                    for(postContent in contents){
+                        if(postContent.url != null){
+                            add(postContent.copy(url = imgUploadController.tradeUrl(postContent.url)))
+                        }
                     }
+
                 }
-                contentList = contents
             }
+
         }
 
 

@@ -122,21 +122,19 @@ class ImgUploadController @Inject constructor() {
                     file.saveInBackground(object : SaveCallback() {
                         override fun done(e: AVException?) {
                             if (e == null) {
-                                liveData?.value = liveData?.value.apply {
-                                    this?.state = UPLOAD_STATE.SUCCESS
+                                liveData?.value = liveData?.value?.apply {
+                                    state = UPLOAD_STATE.SUCCESS
+                                    url = file.url
+                                }
+                                Timber.d(file.url)
+                                appExecutors.diskIO().execute {
+                                    imgDao.insert(Img(path, file.url))
                                 }
                             } else {
                                 liveData?.value = liveData?.value.apply {
                                     this?.state = UPLOAD_STATE.FAIL
                                 }
                                 Timber.d("upload img exception->${e.message}")
-                                Timber.d(file.url)
-                                liveData?.value?.apply {
-                                    url = file.url
-                                }
-                                appExecutors.diskIO().execute {
-                                    imgDao.insert(Img(path, file.url))
-                                }
                             }
 
                         }
