@@ -9,7 +9,7 @@ import android.os.Parcelable
  */
 
 @Entity(primaryKeys = ["postId"])
-data class Post(val postId: String, val title: String) : Parcelable {
+data class Post(var postId: String, val title: String) : Parcelable {
     var coverUrl: String? = null
     constructor(source: Parcel) : this(
             source.readString(),

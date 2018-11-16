@@ -6,11 +6,10 @@ import cn.kirilenkoo.www.coolpets.api.ApiResponse
 import cn.kirilenkoo.www.coolpets.db.PostContentDao
 import cn.kirilenkoo.www.coolpets.db.PostDao
 import cn.kirilenkoo.www.coolpets.db.PostWithContentsDao
+import cn.kirilenkoo.www.coolpets.model.ApiPHMsg
 import cn.kirilenkoo.www.coolpets.model.Post
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
-import cn.kirilenkoo.www.coolpets.util.AppExecutors
-import cn.kirilenkoo.www.coolpets.util.mockGetPosts
-import cn.kirilenkoo.www.coolpets.util.mockGetPostsWithContents
+import cn.kirilenkoo.www.coolpets.util.*
 import com.android.example.github.vo.Resource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -91,6 +90,23 @@ class PostRepository @Inject constructor(
             override fun loadFromDb(): LiveData<List<PostWithContents>> = postWithContentsDao.findAllWithContent()
 
             override fun createCall(): LiveData<ApiResponse<List<PostWithContents>>> = mockGetPostsWithContents(page, appExecutor)
+
+        }.asLiveData()
+    }
+    fun savePostWithContents(post: PostWithContents):LiveData<Resource<PostWithContents>>{
+        return object : NetworkBoundResource<PostWithContents, ApiPHMsg>(appExecutor){
+            override fun saveCallResult(item: ApiPHMsg) {
+                postDao.insert(post.post)
+                for (pc in post.contentList){
+                    postContentDao.insert(pc)
+                }
+            }
+
+            override fun shouldFetch(data: PostWithContents?): Boolean = true
+
+            override fun loadFromDb(): LiveData<PostWithContents> = AbsentLiveData.create()
+
+            override fun createCall(): LiveData<ApiResponse<ApiPHMsg>> = submitPost(post, appExecutor)
 
         }.asLiveData()
     }

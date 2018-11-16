@@ -1,10 +1,16 @@
 package cn.kirilenkoo.www.coolpets.util
 
 import androidx.lifecycle.MutableLiveData
+import cn.kirilenkoo.www.coolpets.api.ApiErrorResponse
 import cn.kirilenkoo.www.coolpets.api.ApiResponse
 import cn.kirilenkoo.www.coolpets.model.*
+import com.avos.avoscloud.AVException
+import com.avos.avoscloud.AVObject
+import com.avos.avoscloud.AVObject.saveAllInBackground
+import com.avos.avoscloud.SaveCallback
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.ArrayList
 
 fun mockGetPosts (page : Int, appExecutors: AppExecutors):MutableLiveData<ApiResponse<List<Post>>>{
     val liveData = MutableLiveData<ApiResponse<List<Post>>>()
@@ -57,3 +63,44 @@ fun mockPostPostReply(postReply: PostReply, appExecutors: AppExecutors): Mutable
 }
 
 fun generatePostId():String = UUID.randomUUID().toString()
+
+fun submitPost(post: PostWithContents, appExecutors: AppExecutors): MutableLiveData<ApiResponse<ApiPHMsg>>{
+    val liveData = MutableLiveData<ApiResponse<ApiPHMsg>>()
+    val avList = ArrayList<AVObject>()
+    for(content in post.contentList){
+        avList.add(AVObject("PostContent").apply {
+            put("text", content.text)
+            put("img",content.url)
+        })
+    }
+    saveAllInBackground(avList,object : SaveCallback() {
+        override fun done(p0: AVException?) {
+            if(p0 == null){
+                val postAV = AVObject("Post").apply {
+                    put("title", post.post.title)
+                    put("contents",avList)
+                }
+                postAV.saveInBackground(object : SaveCallback(){
+                    override fun done(p0: AVException?) {
+                        if(p0 == null){
+                            post.post.postId = postAV.objectId
+                            for (i in 0 until post.contentList.size){
+                                post.contentList[i].contentId = avList[i].objectId
+                            }
+                            liveData.value = ApiResponse.Companion.create(ApiPHMsg(""))
+                        }else{
+                            liveData.value = ApiErrorResponse(p0.toString())
+                        }
+                    }
+
+                })
+            }else{
+                liveData.value = ApiErrorResponse(p0.toString())
+            }
+
+
+        }
+
+    })
+    return liveData
+}

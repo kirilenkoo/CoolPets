@@ -80,12 +80,16 @@ class PostEditFragment : BaseFragment(), Injectable {
                     findNavController().navigate(R.id.action_postEdeitFragment_to_postPreviewFragment,bundle)
                 }
                 3 -> {
-
+                    viewModel.getTmpPost().postTitle = binding.editPostTitle.text.toString()
+                    viewModel.submitPost()
                 }
 
             }
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostEditViewModel::class.java)
+        viewModel.postUpdateData.observe(viewLifecycleOwner, Observer {
+            Timber.d("submit:${it.status}->${it.data}")
+        })
         return dataBinding.root
     }
 
@@ -153,6 +157,7 @@ class PostEditFragment : BaseFragment(), Injectable {
             val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(intent,PICK_IMAGE_COVER_REQUEST)
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

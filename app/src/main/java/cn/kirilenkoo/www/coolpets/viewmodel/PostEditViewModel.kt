@@ -4,21 +4,28 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import cn.kirilenkoo.www.coolpets.model.Post
 import cn.kirilenkoo.www.coolpets.model.PostContent
+import cn.kirilenkoo.www.coolpets.model.PostReply
 import cn.kirilenkoo.www.coolpets.model.PostWithContents
 import cn.kirilenkoo.www.coolpets.repository.PostRepository
 import cn.kirilenkoo.www.coolpets.ui.view.StateImageView
+import cn.kirilenkoo.www.coolpets.util.AbsentLiveData
 import cn.kirilenkoo.www.coolpets.util.ImgUploadController
+import cn.kirilenkoo.www.coolpets.util.isStringEmpty
+import com.android.example.github.vo.Resource
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class PostEditViewModel @Inject constructor(val postRepository: PostRepository, val imgUploadController: ImgUploadController): ViewModel(){
     private var tmpPost:EditPost = EditPost()
-
+    private val postUpdate:MutableLiveData<PostWithContents> = MutableLiveData()
+    var postUpdateData: LiveData<Resource<PostWithContents>> = Transformations.switchMap(postUpdate){
+        it -> if(it.post == null) AbsentLiveData.create()
+    else postRepository.savePostWithContents(it)
+    }
     private fun bindImageView(imageView: ImageView, localPath: String?, viewLifecycleOwner: LifecycleOwner) {
         imgUploadController.bindView(imageView as StateImageView, localPath, viewLifecycleOwner)
     }
@@ -61,6 +68,12 @@ class PostEditViewModel @Inject constructor(val postRepository: PostRepository, 
     fun textChanged(indexOfChild: Int, s: String) {
         tmpPost.contents[indexOfChild].text = s
     }
+
+    fun submitPost() {
+        postUpdate.value = tmpPost.generatePostWithContents(imgUploadController)
+    }
+
+
 }
 
 data class EditPost(var postTitle: String? = null, var coverPath: String? = null, val contents: ArrayList<PostContent> = ArrayList()) : Parcelable {
@@ -86,4 +99,23 @@ data class EditPost(var postTitle: String? = null, var coverPath: String? = null
         }
     }
 
+    fun generatePostWithContents(imgUploadController: ImgUploadController):PostWithContents?{
+        val postWithContents = PostWithContents().apply {
+            post = Post("",postTitle?:"")
+            contentList = ArrayList<PostContent>().apply {
+
+                    for(postContent in contents){
+                        if(isStringEmpty(postContent.url)){
+                            add(postContent.copy())
+                        }else{
+                            add(postContent.copy(url = imgUploadController.tradeUrl(postContent.url)))
+                        }
+                    }
+
+
+            }
+
+        }
+        return postWithContents
+    }
 }
