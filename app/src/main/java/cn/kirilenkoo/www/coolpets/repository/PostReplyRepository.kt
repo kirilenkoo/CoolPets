@@ -3,6 +3,8 @@ package cn.kirilenkoo.www.coolpets.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cn.kirilenkoo.www.coolpets.api.ApiResponse
+import cn.kirilenkoo.www.coolpets.api.getPostReplys
+import cn.kirilenkoo.www.coolpets.api.submitComment
 import cn.kirilenkoo.www.coolpets.db.PostDao
 import cn.kirilenkoo.www.coolpets.db.PostReplyDao
 import cn.kirilenkoo.www.coolpets.model.ApiPHMsg
@@ -19,15 +21,10 @@ import javax.inject.Singleton
 @Singleton
 class PostReplyRepository @Inject constructor(private val appExecutor : AppExecutors,
                                               private val postReplyDao: PostReplyDao) {
-    //先将要发布的reply存入数据库，然后提交给后台换取新的id,成功后更新数据库的reply id, 因为reply id是主键，只能删掉重新插入，不想重新插入的话就多加一个本地id字段做主键
     fun savePostReply(postReply:PostReply):LiveData<Resource<PostReply>>{
-        appExecutor.diskIO().execute {
-            postReplyDao.insert(postReply)
-        }
         return object : NetworkBoundResource<PostReply, ApiPHMsg>(appExecutor){
             override fun saveCallResult(item: ApiPHMsg) {
-                val updatedReply = PostReply(item.remoteGeneratedId,postReply.postId,postReply.posterId,postReply.content,postReply.imgUrl)
-                postReplyDao.deletePostReply(postReply)
+                val updatedReply = PostReply(postReply.replyId,postReply.postId,postReply.posterId,postReply.content,postReply.imgUrl)
                 postReplyDao.insert(updatedReply)
             }
 
@@ -35,7 +32,7 @@ class PostReplyRepository @Inject constructor(private val appExecutor : AppExecu
 
             override fun loadFromDb(): LiveData<PostReply> = AbsentLiveData.create()
 
-            override fun createCall(): LiveData<ApiResponse<ApiPHMsg>> = mockPostPostReply(postReply,appExecutor)
+            override fun createCall(): LiveData<ApiResponse<ApiPHMsg>> = submitComment(postReply)
 
         }.asLiveData()
     }
@@ -51,7 +48,7 @@ class PostReplyRepository @Inject constructor(private val appExecutor : AppExecu
                 return postReplyDao.findPostReply(postId)
             }
 
-            override fun createCall(): LiveData<ApiResponse<List<PostReply>>> = AbsentLiveData.create()
+            override fun createCall(): LiveData<ApiResponse<List<PostReply>>> = getPostReplys(postId)
 
         }.asLiveData()
     }

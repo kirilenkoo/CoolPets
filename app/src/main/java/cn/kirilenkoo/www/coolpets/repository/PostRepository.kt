@@ -3,6 +3,8 @@ package cn.kirilenkoo.www.coolpets.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cn.kirilenkoo.www.coolpets.api.ApiResponse
+import cn.kirilenkoo.www.coolpets.api.getPostsWithContents
+import cn.kirilenkoo.www.coolpets.api.submitPost
 import cn.kirilenkoo.www.coolpets.db.PostContentDao
 import cn.kirilenkoo.www.coolpets.db.PostDao
 import cn.kirilenkoo.www.coolpets.db.PostWithContentsDao
@@ -23,56 +25,6 @@ class PostRepository @Inject constructor(
         private val postDao: PostDao,
         private val postWithContentsDao: PostWithContentsDao,
         private val postContentDao: PostContentDao){
-    fun loadPost(postId: String):LiveData<Resource<Post>>{
-        return object : NetworkBoundResource<Post,Post>(appExecutor){
-            override fun saveCallResult(item: Post) {
-            }
-
-            override fun shouldFetch(data: Post?): Boolean {
-                return true
-            }
-
-            override fun loadFromDb(): LiveData<Post> {
-                val liveData = MutableLiveData<Post>()
-//                liveData.value = Post("kkk")
-                return liveData
-            }
-
-            override fun createCall(): LiveData<ApiResponse<Post>> {
-                val liveData = MutableLiveData<ApiResponse<Post>>()
-//                val apiResponseWrapper = ApiResponse<Post>(Post("hhh"))
-//                liveData.value = apiResponseWrapper
-                return liveData
-            }
-
-        }.asLiveData()
-    }
-
-    fun loadPosts(page: Int):LiveData<Resource<List<Post>>>{
-        return object : NetworkBoundResource<List<Post>, List<Post>>(appExecutor){
-            override fun saveCallResult(item: List<Post>) {
-                for (post in item){
-                    postDao.insert(post)
-                }
-            }
-
-            override fun shouldFetch(data: List<Post>?): Boolean {
-                return true
-            }
-
-            override fun loadFromDb(): LiveData<List<Post>> = postDao.findAll()
-//            {
-//                val liveData = MutableLiveData<List<Post>>()
-//                val posts = ArrayList<Post>()
-//                posts.add(Post("hhh"))
-//                liveData.value = posts
-//                return liveData
-//            }
-
-            override fun createCall(): LiveData<ApiResponse<List<Post>>>  = mockGetPosts(page, appExecutor)
-
-        }.asLiveData()
-    }
 
     fun loadPostsWithContents(page: Int):LiveData<Resource<List<PostWithContents>>>{
         return object : NetworkBoundResource<List<PostWithContents>, List<PostWithContents>>(appExecutor){
@@ -89,7 +41,7 @@ class PostRepository @Inject constructor(
 
             override fun loadFromDb(): LiveData<List<PostWithContents>> = postWithContentsDao.findAllWithContent()
 
-            override fun createCall(): LiveData<ApiResponse<List<PostWithContents>>> = mockGetPostsWithContents(page, appExecutor)
+            override fun createCall(): LiveData<ApiResponse<List<PostWithContents>>> = getPostsWithContents(page, appExecutor)
 
         }.asLiveData()
     }
@@ -106,7 +58,7 @@ class PostRepository @Inject constructor(
 
             override fun loadFromDb(): LiveData<PostWithContents> = AbsentLiveData.create()
 
-            override fun createCall(): LiveData<ApiResponse<ApiPHMsg>> = submitPost(post, appExecutor)
+            override fun createCall(): LiveData<ApiResponse<ApiPHMsg>> = submitPost(post)
 
         }.asLiveData()
     }
