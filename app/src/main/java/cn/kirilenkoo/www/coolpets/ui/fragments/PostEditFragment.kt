@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import cn.kirilenkoo.www.coolpets.R
+import cn.kirilenkoo.www.coolpets.api.submitPost
 import cn.kirilenkoo.www.coolpets.base.BaseApplication
 import cn.kirilenkoo.www.coolpets.base.BaseFragment
 import cn.kirilenkoo.www.coolpets.binding.FragmentDataBindingComponent

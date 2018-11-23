@@ -1,23 +1,22 @@
 package cn.kirilenkoo.www.coolpets.ui.fragments
 
 
-import androidx.lifecycle.ViewModelProvider
 import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 
 import cn.kirilenkoo.www.coolpets.R
+import cn.kirilenkoo.www.coolpets.auth.AUTHLEVEL
+import cn.kirilenkoo.www.coolpets.auth.AuthController
 import cn.kirilenkoo.www.coolpets.databinding.FragmentMainBinding
 import cn.kirilenkoo.www.coolpets.di.Injectable
 import cn.kirilenkoo.www.coolpets.model.Tag
-import cn.kirilenkoo.www.coolpets.ui.view.CoolPetHeaderView
 import cn.kirilenkoo.www.coolpets.util.autoCleared
 import timber.log.Timber
 import javax.inject.Inject
@@ -29,6 +28,9 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
     }
 
     public var binding by autoCleared<FragmentMainBinding>()
+
+    @Inject
+    lateinit var auth: AuthController
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -41,10 +43,16 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
         binding = dataBinding
         binding.panelListener = View.OnClickListener {
             when (binding.bottomBar.indexOfChild(it)){
-                1 -> findNavController().navigate(R.id.postEdeitFragment)
+                1 -> {
+//                    findNavController().navigate(R.id.signInFragment)
+//                    auth.executeAuthFun(goEditPost(),AUTHLEVEL.SIGN,findNavController())
+                }
             }
         }
         return dataBinding.root
+    }
+    fun goEditPost(){
+        findNavController().navigate(R.id.postEdeitFragment)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

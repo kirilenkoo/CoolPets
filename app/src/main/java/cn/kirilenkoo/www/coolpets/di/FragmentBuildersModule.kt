@@ -16,4 +16,6 @@ abstract class FragmentBuildersModule {
     abstract fun contributePostEditFragment(): PostEditFragment
     @ContributesAndroidInjector
     abstract fun contributePostPreviewFragment(): PostPreviewFragment
+    @ContributesAndroidInjector
+    abstract fun contributeSignInFragment(): SignInFragment
 }
