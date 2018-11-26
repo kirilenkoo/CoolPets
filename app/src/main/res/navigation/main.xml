@@ -40,9 +40,6 @@
         android:label="PostPreviewFragment">
         <argument android:name="editPost" />
     </fragment>
-    <fragment
-        android:id="@+id/signInFragment"
-        android:name="cn.kirilenkoo.www.coolpets.ui.fragments.SignInFragment"
-        android:label="SignInFragment">
-    </fragment>
+
+
 </navigation>

@@ -9,10 +9,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 
 import cn.kirilenkoo.www.coolpets.R
-import cn.kirilenkoo.www.coolpets.auth.AUTHLEVEL
 import cn.kirilenkoo.www.coolpets.auth.AuthController
 import cn.kirilenkoo.www.coolpets.databinding.FragmentMainBinding
 import cn.kirilenkoo.www.coolpets.di.Injectable
@@ -44,15 +44,12 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
         binding.panelListener = View.OnClickListener {
             when (binding.bottomBar.indexOfChild(it)){
                 1 -> {
-//                    findNavController().navigate(R.id.signInFragment)
-//                    auth.executeAuthFun(goEditPost(),AUTHLEVEL.SIGN,findNavController())
+                    if(auth.isLogin()) findNavController().navigate(R.id.postEdeitFragment)
+                    else auth.showLogin()
                 }
             }
         }
         return dataBinding.root
-    }
-    fun goEditPost(){
-        findNavController().navigate(R.id.postEdeitFragment)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

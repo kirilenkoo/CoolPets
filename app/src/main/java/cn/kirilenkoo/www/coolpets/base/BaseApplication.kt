@@ -2,6 +2,7 @@ package cn.kirilenkoo.www.coolpets.base
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import cn.kirilenkoo.www.coolpets.di.AppInjector
 import cn.kirilenkoo.www.coolpets.di.DaggerAppComponent
 import cn.kirilenkoo.www.coolpets.model.Pet
@@ -20,6 +21,17 @@ class BaseApplication: Application(), HasActivityInjector {
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
     override fun activityInjector() = dispatchingAndroidInjector
+
+    companion object {
+        private var instance: BaseApplication? = null
+
+        fun applicationContext() : Context {
+            return instance!!.applicationContext
+        }
+    }
+    init {
+        instance = this
+    }
 
     override fun onCreate() {
         super.onCreate()
