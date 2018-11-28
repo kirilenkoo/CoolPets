@@ -19,6 +19,9 @@
         android:id="@+id/mainFragment"
         android:name="cn.kirilenkoo.www.coolpets.ui.fragments.MainFragment"
         android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_MyAccountFragment"
+            app:destination="@id/MyAccountFragment" />
     </fragment>
     <fragment
         android:id="@+id/postDetailFragment"
@@ -40,6 +43,10 @@
         android:label="PostPreviewFragment">
         <argument android:name="editPost" />
     </fragment>
-
+    <fragment
+        android:id="@+id/MyAccountFragment"
+        android:name="cn.kirilenkoo.www.coolpets.ui.fragments.MyAccountFragment"
+        android:label="MyAccountFragment" >
+    </fragment>
 
 </navigation>

@@ -7,5 +7,14 @@
         android:id="@+id/signInFragment"
         android:name="cn.kirilenkoo.www.coolpets.ui.fragments.SignInFragment"
         android:label="SignInFragment">
+        <action
+            android:id="@+id/action_signInFragment_to_signInfoFragment"
+            app:destination="@id/signInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInfoFragment"
+        android:name="cn.kirilenkoo.www.coolpets.ui.fragments.SignInfoFragment"
+        android:label="SignInfoFragment">
+
     </fragment>
 </navigation>

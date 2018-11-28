@@ -18,4 +18,8 @@ abstract class FragmentBuildersModule {
     abstract fun contributePostPreviewFragment(): PostPreviewFragment
     @ContributesAndroidInjector
     abstract fun contributeSignInFragment(): SignInFragment
+    @ContributesAndroidInjector
+    abstract fun contributeSignInfoFragment(): SignInfoFragment
+    @ContributesAndroidInjector
+    abstract fun contributeMyAccountFragment(): MyAccountFragment
 }

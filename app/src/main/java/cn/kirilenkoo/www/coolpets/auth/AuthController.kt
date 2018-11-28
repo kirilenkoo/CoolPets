@@ -20,8 +20,6 @@ import javax.inject.Singleton
 class AuthController {
     private var accountLiveData: MutableLiveData<Account> = MutableLiveData()
     @Inject constructor(){
-        Timber.d("auth created")
-        //TODO: read account info from db
         if(AVUser.getCurrentUser()!=null){
             accountLiveData.value = Account(AVUser.getCurrentUser().objectId,AVUser.getCurrentUser().username)
         }
@@ -30,11 +28,9 @@ class AuthController {
 
     fun login(account: Account){
         accountLiveData.value = account
-        //TODO: write account info to db
     }
     fun logOut(){
         accountLiveData.value = null
-        //TODO: remove account info from db
     }
     fun isLogin():Boolean = accountLiveData.value != null
 

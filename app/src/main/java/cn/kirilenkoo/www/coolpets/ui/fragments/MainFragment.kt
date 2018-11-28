@@ -47,6 +47,10 @@ class MainFragment : Fragment(),Injectable, PostListFragment.FragmentFinishedCal
                     if(auth.isLogin()) findNavController().navigate(R.id.postEdeitFragment)
                     else auth.showLogin()
                 }
+                2 -> {
+                    if(auth.isLogin()) findNavController().navigate(R.id.action_mainFragment_to_MyAccountFragment)
+                    else auth.showLogin()
+                }
             }
         }
         return dataBinding.root

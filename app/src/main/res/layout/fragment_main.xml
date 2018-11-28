@@ -54,7 +54,8 @@
                 android:layout_weight="1"
                 android:padding="12dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_bottom_user"/>
+                android:src="@drawable/icon_bottom_user"
+                android:onClick="@{panelListener::onClick}"/>
         </LinearLayout>
     </RelativeLayout>
 </layout>
